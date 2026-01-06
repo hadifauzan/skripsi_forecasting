@@ -1,0 +1,226 @@
+/* public/css/sidebar.css */
+
+/* Hamburger Button Styling - hanya yang tidak ada di Tailwind */
+.hamburger-btn {
+    transition: all 0.2s ease;
+}
+
+.hamburger-btn:hover {
+    background-color: rgba(243, 244, 246, 1);
+}
+
+/* Hamburger Lines Animation */
+.hamburger-line {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+}
+
+/* Hamburger active state menggunakan brand-500 */
+#hamburger-btn.hamburger-active .hamburger-line {
+    background-color: #528b89 !important; /* brand-500 color */
+}
+
+/* Notification Bubble Styling */
+.notification-bubble {
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+    border: 2px solid #ffffff;
+    z-index: 10;
+    animation: notificationPulse 2s infinite;
+}
+
+.notification-badge {
+    box-shadow: 0 1px 4px rgba(239, 68, 68, 0.3);
+    border: 1px solid #ffffff;
+    font-size: 10px;
+    z-index: 10;
+    animation: badgePulse 2s infinite;
+}
+
+/* Notification Animations */
+@keyframes notificationPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+@keyframes badgePulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+/* Hover states untuk notification elements */
+.nav-item:hover .notification-bubble,
+.nav-item:hover .notification-badge {
+    animation-play-state: paused;
+    transform: scale(1);
+}
+
+/* Responsive notification positioning */
+@media (max-width: 1023px) {
+    .notification-bubble {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        min-width: 18px;
+        height: 18px;
+        font-size: 10px;
+    }
+    
+    .notification-badge {
+        min-width: 16px;
+        height: 16px;
+        font-size: 9px;
+    }
+}
+
+/* Mini Sidebar Tooltips - Functionality yang tidak bisa dilakukan dengan Tailwind saja */
+.sidebar-mini .nav-item[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 70px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(82, 139, 137, 0.95); /* Brand color dengan opacity */
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Hide tooltips on mobile */
+@media (max-width: 1023px) {
+    .sidebar-mini .nav-item[data-tooltip]:hover::after {
+        display: none;
+    }
+}
+
+/* Submenu Transitions */
+.submenu-transition {
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+/* Chevron rotation animation */
+.chevron-transition {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Sidebar scrollbar styling - Tidak bisa dilakukan dengan Tailwind */
+#sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+#sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+#sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+}
+
+#sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Hover effects yang lebih kompleks - gunakan dengan hati-hati */
+.nav-item:hover {
+    transform: translateX(2px);
+}
+
+/* Submenu item hover effects */
+[id$="-submenu"] a:hover {
+    transform: translateX(4px);
+}
+
+/* Mobile overlay backdrop blur - enhancement untuk Tailwind */
+#sidebar-overlay {
+    backdrop-filter: blur(2px);
+}
+
+/* Mobile specific hamburger button styling */
+@media (max-width: 1023px) {
+    #hamburger-btn {
+        min-width: 44px;
+        min-height: 44px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .hamburger-line {
+        width: 20px;
+        height: 2px;
+        background-color: #6b7280; /* gray-500 default */
+        transition: all 0.3s ease;
+    }
+
+    /* Mobile active state */
+    #hamburger-btn.hamburger-active .hamburger-line {
+        background-color: #528b89 !important; /* brand-500 */
+    }
+}
+
+/* Accessibility - Focus states */
+.nav-item:focus,
+.nav-item:focus-visible {
+    outline: 2px solid rgba(82, 139, 137, 0.5); /* brand-500 dengan opacity */
+    outline-offset: 2px;
+}
+
+#hamburger-btn:focus-visible {
+    outline: 2px solid #528b89; /* brand-500 */
+    outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+    
+    .notification-bubble,
+    .notification-badge {
+        animation: none !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    #sidebar,
+    #sidebar-overlay,
+    #hamburger-btn {
+        display: none !important;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+    }
+}

@@ -1,0 +1,907 @@
+/* Gentle Living Landing Page Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif !important;
+    background: #faf7f2 !important;
+    min-height: 100vh;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow-x: hidden;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    width: 100vw;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    border-bottom: 5px solid #a97aaa;
+    padding: 60px 100px;
+    margin: 0;
+}
+
+/* Background Image */
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 1;
+}
+
+/* White Overlay */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.65) 50%, rgba(255, 255, 255, 0.2) 70%);
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    max-width: 700px;
+    text-align: left;
+}
+
+h1 {
+    font-size: 52px !important;
+    font-weight: 700 !important;
+    color: #a97aaa !important;
+    margin-bottom: 20px !important;
+    line-height: 1.2 !important;
+    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+}
+
+.subtitle {
+    font-size: 18px;
+    color: #6b7280;
+    margin-bottom: 35px;
+    line-height: 1.7;
+    max-width: 600px;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.cta-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #a78bfa 0%, #9333ea 100%);
+    color: white;
+    padding: 18px 60px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 17px;
+    box-shadow: 0 6px 20px rgba(93,212,191,0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(93,212,191,0.5);
+}
+
+.hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%);
+    color: white;
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(167,139,250,0.3);
+}
+
+/* Why Join Section */
+.why-join-section {
+    background: #faf7f2;
+    padding: 60px 100px;
+    width: 100%;
+}
+
+.section-title {
+    font-size: 30px;
+    font-weight: 700;
+    color: #a97aaa;
+    text-align: center;
+    margin-bottom: 12px;
+    line-height: 1.3;
+}
+
+.section-subtitle {
+    font-size: 18px;
+    color: #9ca3af;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+/* Features Container - 2 Column Grid */
+.features-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 60px;
+    max-width: 1200px;
+    margin: 0 auto 50px;
+    align-items: center;
+}
+
+/* Question Side - Left 1/3 */
+.question-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.question-icon {
+    font-size: 180px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #a97aaa 0%, #8b5a8d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    opacity: 1
+}
+
+/* Checklist Side - Right 2/3 */
+.checklist-side {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    text-align: left;
+}
+
+.check-icon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #a78bfa 0%, #9333ea 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    margin-top: 2px;
+}
+
+.checklist-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1f2937;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.bottom-text {
+    text-align: center;
+    font-size: 15px;
+    color: #a97aaa;
+    line-height: 1.6;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+    h1 {
+        font-size: 32px;
+    }
+
+    .features-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .question-icon {
+        font-size: 100px;
+    }
+
+    .hero-content {
+        padding: 50px 30px;
+    }
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 0;
+    }
+
+    .hero-section {
+        min-height: 45vh;
+    }
+
+    .hero-content {
+        padding: 40px 20px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    .subtitle {
+        font-size: 15px;
+    }
+
+    .cta-button {
+        padding: 15px 40px;
+        font-size: 16px;
+    }
+
+    .features-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .question-icon {
+        font-size: 70px;
+    }
+
+    .checklist-item {
+        gap: 12px;
+    }
+
+    .check-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+    }
+
+    .checklist-text {
+        font-size: 14px;
+    }
+
+    .why-join-section {
+        padding: 50px 20px;
+    }
+
+    .section-title {
+        font-size: 28px;
+    }
+}
+
+/* Benefits Section */
+.benefits-section {
+    background: #faf7f2;
+    padding: 70px 100px;
+    width: 100%;
+}
+
+.benefits-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.benefits-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #a97aaa;
+    line-height: 1.3;
+    text-align: center;
+    margin-bottom: 50px;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 25px;
+    max-width: 1000px;
+    margin: 0 auto 50px;
+}
+
+.benefit-card {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #ffffff 0%, #fffbf7 100%);
+    padding: 35px 25px;
+    border-radius: 15px;
+    text-align: center;
+    border: 2px solid rgba(167, 139, 250, 0.2);
+    box-shadow: 0 4px 15px rgba(167, 139, 250, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(167, 139, 250, 0.3);
+    border-color: #a78bfa;
+}
+
+.benefit-card:nth-child(4) {
+    grid-column: 2 / 4;
+}
+
+.benefit-card:nth-child(5) {
+    grid-column: 4 / 6;
+}
+
+.benefit-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #4a3a4a;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.benefits-summary {
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.summary-text {
+    font-size: 17px;
+    color: #a97aaa;
+    line-height: 1.7;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+.cta-button-purple {
+    display: inline-block;
+    background: linear-gradient(135deg, #a78bfa 0%, #9333ea 100%);
+    color: white;
+    padding: 16px 50px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    box-shadow: 0 8px 25px rgba(167,139,250,0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-button-purple:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(147,51,234,0.5);
+}
+
+/* Why Easy Section */
+.why-easy-section {
+    background: #faf7f2;
+    padding: 60px 40px;
+}
+
+.why-easy-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #a97aaa;
+    line-height: 1.3;
+    text-align: center;
+    margin-bottom: 50px;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.why-easy-content {
+    max-width: 900px;
+    margin: 0 auto 50px;
+    background: linear-gradient(135deg, #ffffff 0%, #fffbf7 100%);
+    padding: 40px;
+    border-radius: 18px;
+    text-align: center;
+    border: 2px solid rgba(167, 139, 250, 0.2);
+    box-shadow: 0 4px 15px rgba(167, 139, 250, 0.15);
+}
+
+.chart-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+#salesChart {
+    max-height: 400px;
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    margin: 0 auto;
+}
+
+.why-easy-text {
+    font-size: 15px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.testimonial-section {
+    width: 100%;
+    margin: 0;
+    padding: 4;
+}
+
+.testimonial-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1f2937;
+    text-align: center;
+}
+
+.testimonial-box {
+    background: transparent;
+    padding: 50px 0;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    overflow: hidden;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+}
+
+.testimonial-gallery {
+    display: flex;
+    gap: 40px;
+    justify-items: center;
+    align-items: center;
+    padding: 0 60px;
+}
+
+.testimonial-image {
+    flex: 0 0 auto;
+    width: auto;
+    height: 450px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #fff;
+}
+
+.testimonial-image:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 15px 40px rgba(169, 122, 170, 0.4);
+}
+
+.testimonial-image img {
+    width: auto;
+    height: 100%;
+    max-width: none;
+    object-fit: contain;
+    display: block;
+}
+
+/* Scrollbar styling for testimonial box */
+.testimonial-box::-webkit-scrollbar {
+    height: 8px;
+}
+
+.testimonial-box::-webkit-scrollbar-track {
+    background: rgba(169, 122, 170, 0.1);
+    border-radius: 10px;
+}
+
+.testimonial-box::-webkit-scrollbar-thumb {
+    background: rgba(169, 122, 170, 0.4);
+    border-radius: 10px;
+}
+
+.testimonial-box::-webkit-scrollbar-thumb:hover {
+    background: rgba(169, 122, 170, 0.6);
+}
+
+
+/* Advantages Section */
+.advantages-section {
+    background: #faf7f2;
+    padding: 5px 100px;
+    width: 100%;
+}
+
+.advantages-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.advantages-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #a97aaa;
+    line-height: 1.3;
+    text-align: center;
+    margin-bottom: 50px;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.advantages-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    max-width: 1000px;
+    margin: 0 auto 50px;
+}
+
+.advantage-card {
+    background: linear-gradient(135deg, #ffffff 0%, #fffbf7 100%);
+    padding: 35px 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(167, 139, 250, 0.15);
+    border: 2px solid rgba(167, 139, 250, 0.2);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.advantage-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(167, 139, 250, 0.3);
+    border-color: #a78bfa;
+}
+
+.advantage-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #4a3a4a;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.advantages-summary {
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.advantages-footer {
+    text-align: center;
+    font-size: 14px;
+    color: #9ca3af;
+    font-style: italic;
+    margin-top: 15px;
+}
+
+/* Final CTA Section */
+.final-cta-section {
+    background: #faf7f2;
+    padding: 70px 40px;
+}
+
+.final-cta-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #a97aaa;
+    line-height: 1.3;
+    text-align: center;
+    margin-bottom: 50px;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.final-cta-content {
+    width: 100%;
+    margin: 0 auto 40px;
+    padding: 0;
+}
+
+.kol-gallery {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.kol-item {
+    flex: 0 0 auto;
+    width: auto;
+    height: auto;
+    max-height: 500px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #000;
+}
+
+.kol-item:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(169, 122, 170, 0.4);
+}
+
+.kol-item video {
+    width: auto;
+    height: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    display: block;
+}
+
+.final-cta-button {
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+
+/* How to Join Section */
+.how-to-join-section {
+    background: #faf7f2;
+    padding: 30px 80px;
+}
+
+.how-to-join-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.how-to-join-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #a97aaa;
+    line-height: 1.3;
+    text-align: center;
+    margin-bottom: 50px;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.steps-box {
+    background: linear-gradient(135deg, #ffffff 0%, #fffbf7 100%);
+    padding: 40px 50px;
+    border-radius: 18px;
+    border: 2px solid rgba(167, 139, 250, 0.2);
+    box-shadow: 0 4px 15px rgba(167, 139, 250, 0.15);
+    margin-bottom: 40px;
+}
+
+.step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 25px 0;
+    border-bottom: 1px solid rgba(169, 122, 170, 0.15);
+}
+
+.step-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.step-item:first-child {
+    padding-top: 0;
+}
+
+.step-number {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #a78bfa 0%, #9333ea 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(167, 139, 250, 0.4);
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-text {
+    font-size: 17px;
+    font-weight: 600;
+    color: #1f2937;
+    line-height: 1.5;
+    margin: 0 0 8px 0;
+}
+
+.step-subtext {
+    font-size: 15px;
+    font-weight: 400;
+    color: #6b7280;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.how-to-join-summary {
+    text-align: center;
+}
+
+.how-to-join-summary .summary-text {
+    font-size: 17px;
+    color: #a97aaa;
+    margin-bottom: 25px;
+    font-weight: 500;
+    line-height: 1.7;
+}
+
+/* Final Call Section */
+.final-call-section {
+    background: #faf7f2;
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.final-call-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #a97aaa;
+    line-height: 1.3;
+    text-align: center;
+    margin-bottom: 50px;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.final-call-subtitle {
+    font-size: 15px;
+    color: #a78bfa;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto 35px;
+    font-weight: 500;
+}
+
+.final-call-button {
+    text-align: center;
+}
+
+/* Responsive untuk Benefits Section */
+@media (max-width: 968px) {
+    .benefits-section {
+        padding: 60px 40px;
+    }
+
+    .benefits-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+
+    .benefit-card {
+        grid-column: span 2;
+        padding: 30px 20px;
+    }
+
+    .benefit-card:nth-child(4) {
+        grid-column: 1 / 3;
+    }
+
+    .benefit-card:nth-child(5) {
+        grid-column: 3 / 5;
+    }
+
+    .benefits-title {
+        font-size: 26px;
+    }
+
+    .benefit-text {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 640px) {
+    .benefits-section {
+        padding: 50px 20px;
+    }
+
+    .benefits-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .benefit-card {
+        grid-column: span 1;
+        padding: 25px 20px;
+    }
+
+    .benefit-card:nth-child(4),
+    .benefit-card:nth-child(5) {
+        grid-column: auto;
+    }
+
+    .benefits-title {
+        font-size: 22px;
+    }
+
+    .benefit-text {
+        font-size: 14px;
+    }
+
+    .summary-text {
+        font-size: 15px;
+    }
+}
+
+/* Responsive untuk How to Join Section */
+@media (max-width: 968px) {
+    .how-to-join-section {
+        padding: 60px 40px;
+    }
+
+    .how-to-join-title {
+        font-size: 28px;
+    }
+
+    .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .step-card {
+        padding: 25px 20px;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    .step-text {
+        font-size: 15px;
+    }
+
+    .step-subtext {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 640px) {
+    .how-to-join-section {
+        padding: 50px 20px;
+    }
+
+    .how-to-join-title {
+        font-size: 24px;
+    }
+
+    .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .step-card {
+        padding: 20px 15px;
+    }
+
+    .step-number {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+
+    .step-text {
+        font-size: 14px;
+    }
+
+    .step-subtext {
+        font-size: 12px;
+    }
+
+    .how-to-join-summary {
+        padding: 30px 20px;
+    }
+
+    .how-to-join-summary .summary-text {
+        font-size: 16px;
+    }
+}
+

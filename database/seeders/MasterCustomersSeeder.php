@@ -1,0 +1,295 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\MasterRole;
+
+class MasterCustomersSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $customers = [
+            [
+                'customer_id' => 1,
+                'company_id' => 3,
+                'customer_type_id' => 1, // Regular customer
+                'name_customer' => 'Budi Santoso',
+                'email_customer' => 'budi@example.com',
+                'phone_customer' => '081234567890',
+                'address_customer' => 'Jl. Merdeka No. 123, Jakarta Pusat',
+                'latitude' => -6.200000,
+                'longitude' => 106.816666,
+                'location_notes' => 'Dekat dengan Mall Grand Indonesia',
+                'status' => 'Aktif',
+                'point' => null,
+                'password' => Hash::make('password123'),
+                'remember_token' => null,
+                'jwt_token' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'deleted_at' => null,
+            ],
+            [
+                'customer_id' => 2,
+                'company_id' => 3,
+                'customer_type_id' => 3, // Reseller
+                'name_customer' => 'Siti Nurhaliza',
+                'email_customer' => 'siti.reseller@example.com',
+                'phone_customer' => '081987654321',
+                'address_customer' => 'Jl. Sudirman No. 456, Jakarta Selatan',
+                'latitude' => -6.225014,
+                'longitude' => 106.808320,
+                'location_notes' => 'Komplek Perumahan Menteng Indah',
+                'status' => 'Aktif',
+                'point' => null,
+                'password' => Hash::make('password123'),
+                'remember_token' => null,
+                'jwt_token' => null,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'deleted_at' => null,
+            ],
+            [
+                'customer_id' => 3,
+                'company_id' => 3,
+                'customer_type_id' => 1, // Regular customer
+                'name_customer' => 'Ahmad Wijaya',
+                'email_customer' => 'ahmad@example.com',
+                'phone_customer' => '082111222333',
+                'address_customer' => 'Jl. Gatot Subroto No. 789, Jakarta Timur',
+                'latitude' => -6.238270,
+                'longitude' => 106.851540,
+                'location_notes' => 'Sebelah Bank Mandiri',
+                'status' => 'Pending',
+                'point' => null,
+                'password' => Hash::make('password123'),
+                'remember_token' => null,
+                'jwt_token' => null,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'deleted_at' => null,
+            ],
+            [
+                'customer_id' => 4,
+                'company_id' => 3,
+                'customer_type_id' => 1, 
+                'name_customer' => 'Dewi Kartika',
+                'email_customer' => 'dewi@example.com',
+                'phone_customer' => '083444555666',
+                'address_customer' => 'Jl. Kemang Raya No. 321, Jakarta Selatan',
+                'latitude' => -6.265780,
+                'longitude' => 106.816020,
+                'location_notes' => 'Kemang Village Mall area',
+                'status' => 'Pending',
+                'point' => null,
+                'password' => Hash::make('password123'),
+                'remember_token' => null,
+                'jwt_token' => null,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'deleted_at' => null,
+            ],
+            [
+                'customer_id' => 5,
+                'company_id' => 3,
+                'customer_type_id' => 1, 
+                'name_customer' => 'Rina Melati',
+                'email_customer' => 'rina@example.com',
+                'phone_customer' => '084777888999',
+                'address_customer' => 'Jl. Thamrin No. 654, Jakarta Pusat',
+                'latitude' => -6.195000,
+                'longitude' => 106.823056,
+                'location_notes' => 'Gedung perkantoran Plaza Indonesia',
+                'status' => 'Pending',
+                'point' => null,
+                'password' => Hash::make('password123'),
+                'remember_token' => null,
+                'jwt_token' => null,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'deleted_at' => null,
+            ],
+            [
+                'customer_id' => 6,
+                'company_id' => 3,
+                'customer_type_id' => 1, // Regular customer
+                'name_customer' => 'Hendra Gunawan',
+                'email_customer' => 'hendra@example.com',
+                'phone_customer' => '085123456789',
+                'address_customer' => 'Jl. Kuningan Barat No. 147, Jakarta Selatan',
+                'latitude' => -6.229728,
+                'longitude' => 106.830139,
+                'location_notes' => 'Dekat dengan Mega Kuningan',
+                'status' => 'Pending',
+                'point' => null,
+                'password' => Hash::make('password123'),
+                'remember_token' => null,
+                'jwt_token' => null,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'deleted_at' => null,
+            ],
+            [
+                'customer_id' => 7,
+                'company_id' => 3,
+                'customer_type_id' => 1, // Regular customer
+                'name_customer' => 'Maya Sari',
+                'email_customer' => 'maya@example.com',
+                'phone_customer' => '086987654321',
+                'address_customer' => 'Jl. Cikini Raya No. 258, Jakarta Pusat',
+                'latitude' => -6.190000,
+                'longitude' => 106.840000,
+                'location_notes' => 'Seberang Taman Ismail Marzuki',
+                'status' => 'Pending',
+                'point' => null,
+                'password' => Hash::make('password123'),
+                'remember_token' => null,
+                'jwt_token' => null,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'deleted_at' => null,
+            ],
+            [
+                'customer_id' => 8,
+                'company_id' => 3,
+                'customer_type_id' => 1, 
+                'name_customer' => 'Robert Tanaka',
+                'email_customer' => 'robert@example.com',
+                'phone_customer' => '087111222333',
+                'address_customer' => 'Jl. Senayan No. 369, Jakarta Selatan',
+                'latitude' => -6.225700,
+                'longitude' => 106.798900,
+                'location_notes' => 'Kompleks Senayan City',
+                'status' => 'Pending',
+                'point' => null,
+                'password' => Hash::make('password123'),
+                'remember_token' => null,
+                'jwt_token' => null,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'deleted_at' => null,
+            ],
+            [
+                'customer_id' => 9,
+                'company_id' => 3,
+                'customer_type_id' => 3, // Reseller
+                'name_customer' => 'Indira Putri',
+                'email_customer' => 'indira.reseller@example.com',
+                'phone_customer' => '088444555666',
+                'address_customer' => 'Jl. Fatmawati No. 741, Jakarta Selatan',
+                'latitude' => -6.274000,
+                'longitude' => 106.797000,
+                'location_notes' => 'Dekat dengan RS Fatmawati',
+                'status' => 'Aktif',
+                'point' => null,
+                'password' => Hash::make('password123'),
+                'remember_token' => null,
+                'jwt_token' => null,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'deleted_at' => null,
+            ],
+            [
+                'customer_id' => 10,
+                'company_id' => 3,
+                'customer_type_id' => 1, // Regular customer
+                'name_customer' => 'Bambang Suryanto',
+                'email_customer' => 'bambang@example.com',
+                'phone_customer' => '089777888999',
+                'address_customer' => 'Jl. Rasuna Said No. 852, Jakarta Selatan',
+                'latitude' => -6.220000,
+                'longitude' => 106.830000,
+                'location_notes' => 'Area Kuningan, gedung perkantoran',
+                'status' => 'Pending',
+                'point' => null,
+                'password' => Hash::make('password123'),
+                'remember_token' => null,
+                'jwt_token' => null,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'deleted_at' => null,
+            ],
+            [
+                'customer_id' => 11,
+                'company_id' => 3,
+                'customer_type_id' => 3, // Reseller 
+                'name_customer' => 'Diana Puspita',
+                'email_customer' => 'diana.reseller@example.com',
+                'phone_customer' => '081555666777',
+                'address_customer' => 'Jl. HR Rasuna Said No. 123, Jakarta Selatan',
+                'latitude' => -6.224000,
+                'longitude' => 106.831000,
+                'location_notes' => 'Setiabudi Building area',
+                'status' => 'Aktif',
+                'point' => null,
+                'password' => Hash::make('password123'),
+                'remember_token' => null,
+                'jwt_token' => null,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'deleted_at' => null,
+            ],
+            [
+                'customer_id' => 12,
+                'company_id' => 3,
+                'customer_type_id' => 4, // Reseller Baby Spa
+                'name_customer' => 'Rizki Ramadhan',
+                'email_customer' => 'rizki.reseller@example.com',
+                'phone_customer' => '082333444555',
+                'address_customer' => 'Jl. TB Simatupang No. 88, Jakarta Selatan',
+                'latitude' => -6.306000,
+                'longitude' => 106.831000,
+                'location_notes' => 'Dekat dengan Pondok Indah Mall',
+                'status' => 'Aktif',
+                'point' => null,
+                'password' => Hash::make('password123'),
+                'remember_token' => null,
+                'jwt_token' => null,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'deleted_at' => null,
+            ],
+            [
+                'customer_id' => 13,
+                'company_id' => 3,
+                'customer_type_id' => 2, // Agent
+                'name_customer' => 'Agus Setiawan',
+                'email_customer' => 'agus.agent@example.com',
+                'phone_customer' => '081999888777',
+                'address_customer' => 'Jl. MT Haryono No. 456, Jakarta Timur',
+                'latitude' => -6.245000,
+                'longitude' => 106.862000,
+                'location_notes' => 'Dekat Halim Perdanakusuma',
+                'status' => 'Aktif',
+                'point' => null,
+                'password' => Hash::make('password123'),
+                'remember_token' => null,
+                'jwt_token' => null,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'deleted_at' => null,
+            ],
+        ];
+
+        // Insert data using DB::table to handle all fields including custom IDs (skip if already exists)
+        foreach ($customers as $customer) {
+            $exists = DB::table('master_customers')
+                ->where('customer_id', $customer['customer_id'])
+                ->exists();
+            
+            if (!$exists) {
+                DB::table('master_customers')->insert($customer);
+            }
+        }
+
+    }
+}
