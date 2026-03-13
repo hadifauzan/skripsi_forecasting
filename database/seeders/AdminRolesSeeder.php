@@ -18,7 +18,10 @@ class AdminRolesSeeder extends Seeder
             'superadmin' => 'Super Administrator - Full system access',
             'admin_content' => 'Content Administrator - Manage content and products',
             'admin_partner' => 'Partner Administrator - Manage affiliate partners',
-            'admin_seller' => 'Seller Administrator - Manage sales and orders'
+            'admin_seller' => 'Seller Administrator - Manage sales and orders',
+            'admin_inventory' => 'Inventory Administrator - Manage inventory and stock',
+            'owner' => 'Owner - Full inventory and production oversight',
+            'production_team' => 'Production Team - View inventory and production data'
         ];
 
         foreach ($roles as $roleName => $description) {
@@ -31,7 +34,7 @@ class AdminRolesSeeder extends Seeder
         // Define permissions for each role
         $permissions = [
             // Dashboard permissions
-            'view_dashboard' => ['superadmin', '', 'admin_partner', 'admin_seller'],
+            'view_dashboard' => ['superadmin', '', 'admin_partner', 'admin_seller', 'admin_inventory', 'owner', 'production_team'],
             
             // User management
             'manage_users' => ['superadmin'],
@@ -58,10 +61,17 @@ class AdminRolesSeeder extends Seeder
             'manage_content' => ['superadmin', 'admin_content'],
             'manage_banners' => ['superadmin', 'admin_content'],
             
+            // Inventory management
+            'manage_inventory' => ['superadmin', 'admin_inventory', 'owner'],
+            'view_inventory' => ['superadmin', 'admin_inventory', 'owner', 'production_team'],
+            'manage_stock' => ['superadmin', 'admin_inventory', 'owner'],
+            'view_stock' => ['superadmin', 'admin_inventory', 'owner', 'production_team'],
+
             // Reports and analytics
-            'view_reports' => ['superadmin'],
-            'view_sales_reports' => ['superadmin', 'admin_seller'],
+            'view_reports' => ['superadmin', 'owner'],
+            'view_sales_reports' => ['superadmin', 'admin_seller', 'owner'],
             'view_affiliate_reports' => ['superadmin', 'admin_partner'],
+            'view_inventory_reports' => ['superadmin', 'admin_inventory', 'owner'],
             
             // System settings
             'manage_settings' => ['superadmin'],

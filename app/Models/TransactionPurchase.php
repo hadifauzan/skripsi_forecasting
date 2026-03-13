@@ -13,18 +13,37 @@ class TransactionPurchase extends Model
 
     protected $fillable = [
         'supplier_id',
-        'purchase_number',
-        'purchase_date',
+        'branch_id',
+        'number',
+        'date',
+        'subtotal',
+        'discount_amount',
+        'discount_percentage',
         'total_amount',
-        'status',
         'notes',
-        'created_by'
+        'whatsapp'
     ];
 
     protected $casts = [
-        'purchase_date' => 'date',
+        'date' => 'datetime',
         'total_amount' => 'float'
     ];
+
+    /**
+     * Backward-compatible alias for legacy code.
+     */
+    public function getPurchaseDateAttribute()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Backward-compatible alias for legacy code.
+     */
+    public function getPurchaseNumberAttribute()
+    {
+        return $this->number;
+    }
 
     public function transactionPayments(): HasMany
     {

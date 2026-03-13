@@ -105,10 +105,19 @@ class CheckRole
                     
                 case 'admin_seller':
                     return ($user->role_id ?? 0) == 9;
+
+                case 'admin_inventory':
+                    return ($user->role_id ?? 0) == 10;
+
+                case 'owner':
+                    return ($user->role_id ?? 0) == 11;
+
+                case 'production_team':
+                    return ($user->role_id ?? 0) == 12;
                     
                 case 'admin':
-                    // Generic admin check - allow all admin types (5, 7, 8, 9)
-                    return in_array(($user->role_id ?? 0), [5, 7, 8, 9]);
+                    // Generic admin check - allow all admin types (5, 7, 8, 9, 10, 11, 12)
+                    return in_array(($user->role_id ?? 0), [5, 7, 8, 9, 10, 11, 12]);
                     
                 case 'user':
                     return ($user->role_id ?? 0) == 6;

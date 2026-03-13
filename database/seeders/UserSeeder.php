@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class UserSeeder extends Seeder
 {
@@ -81,12 +81,45 @@ class UserSeeder extends Seeder
                 'phone' => '081234567895',
                 'status' => 'Aktif',
             ],
+            // Role 10: Admin Inventory
+            [
+                'company_id' => 3,
+                'role_id' => 10,
+                'name' => 'Inventory Admin',
+                'email' => 'inventory@gentleliving.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('admin123'),
+                'phone' => '081234567896',
+                'status' => 'Aktif',
+            ],
+            // Role 11: Owner
+            [
+                'company_id' => 3,
+                'role_id' => 11,
+                'name' => 'Owner',
+                'email' => 'owner@gentleliving.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('owner123'),
+                'phone' => '081234567897',
+                'status' => 'Aktif',
+            ],
+            // Role 12: Production Team
+            [
+                'company_id' => 3,
+                'role_id' => 12,
+                'name' => 'Production Team',
+                'email' => 'production@gentleliving.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('admin123'),
+                'phone' => '081234567898',
+                'status' => 'Aktif',
+            ],
         ];
 
         foreach ($users as $user) {
-            User::updateOrCreate(
+            DB::table('master_users')->updateOrInsert(
                 ['email' => $user['email']],
-                $user
+                array_merge($user, ['email_verified_at' => now()])
             );
         }
     }

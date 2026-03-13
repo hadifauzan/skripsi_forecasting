@@ -161,11 +161,7 @@ class User extends Authenticatable
 
     public function getAdminType()
     {
-        if ($this->isSuperAdmin()) return 'superadmin';
-        if ($this->isAdminKonten()) return 'admin_content';
-        if ($this->isAdminPartner()) return 'admin_partner';
-        if ($this->isAdminSeller()) return 'admin_seller';
-        return null;
+        return $this->getRoleNameFromRoleId();
     }
 
     public function getAdminBadgeClass()
@@ -195,6 +191,12 @@ class User extends Authenticatable
                 return 'Partner Admin';
             case 'admin_seller':
                 return 'Seller Admin';
+            case 'admin_inventory':
+                return 'Inventory Admin';
+            case 'owner':
+                return 'Owner';
+            case 'production_team':
+                return 'Production Team';
             default:
                 return 'Admin';
         }
@@ -207,15 +209,35 @@ class User extends Authenticatable
     {
         // Check for generic 'admin' role - should match all admin types
         if ($roleName === 'admin') {
-            return in_array($this->role_id, [5, 7, 8, 9]); // All admin role_ids
+            return in_array($this->role_id, [5, 7, 8, 9, 10, 11, 12]);
         }
-        
-        if ($this->masterRole) {
-            return $this->masterRole->name_role === $roleName;
+
+        $roleName = strtolower((string) $roleName);
+
+        // Prefer database role name when relation is available
+        if ($this->masterRole && isset($this->masterRole->name_role)) {
+            return strtolower((string) $this->masterRole->name_role) === $roleName;
         }
-        
-        // Fallback to getAdminType method
-        return $this->getAdminType() === $roleName;
+
+        // Fallback to role_id mapping without recursion
+        return strtolower((string) $this->getRoleNameFromRoleId()) === $roleName;
+    }
+
+    /**
+     * Map role_id to stable role name when relation data is unavailable.
+     */
+    private function getRoleNameFromRoleId(): ?string
+    {
+        return match ((int) $this->role_id) {
+            5 => 'superadmin',
+            7 => 'admin_content',
+            8 => 'admin_partner',
+            9 => 'admin_seller',
+            10 => 'admin_inventory',
+            11 => 'owner',
+            12 => 'production_team',
+            default => null,
+        };
     }
 
     /**

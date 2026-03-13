@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AboutUsContentController;
 use App\Http\Controllers\Admin\AffiliateContentController;
+use App\Http\Controllers\Admin\InventoryDashboardController;
 use App\Http\Controllers\Admin\ResellerContentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -535,6 +536,11 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
                 ]);
             })->name('steps.create');
         });
+    });
+
+    // Inventory Dashboard - Owner, Admin Inventory, Production Team
+    Route::middleware(['role:owner,admin_inventory,production_team'])->group(function () {
+        Route::get('/inventory-dashboard', [InventoryDashboardController::class, 'index'])->name('admin.inventory.dashboard');
     });
 });
 
