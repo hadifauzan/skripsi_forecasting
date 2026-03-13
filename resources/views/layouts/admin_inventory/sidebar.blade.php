@@ -44,7 +44,7 @@
                 <li class="relative">
                     <button onclick="toggleSubmenu('inventory-menu')" data-tooltip="Inventory Management"
                         class="nav-item group w-full flex items-center justify-start px-3 py-3 rounded-lg transition-all duration-200
-                        {{ request()->routeIs('admin.inventory.*') ? 'bg-teal-500 text-white shadow-sm' : 'text-gray-300 hover:bg-teal-500 hover:text-white' }}">
+                        {{ request()->routeIs('admin.inventory.*') && !request()->routeIs('admin.inventory.dashboard') ? 'bg-teal-500 text-white shadow-sm' : 'text-gray-300 hover:bg-teal-500 hover:text-white' }}">
                         <x-heroicon-s-archive-box class="nav-icon w-5 h-5 flex-shrink-0" />
                         <span class="sidebar-text font-medium ml-3 hidden whitespace-nowrap">Inventory Management</span>
                         <x-heroicon-s-chevron-down class="sidebar-text w-4 h-4 chevron-transition hidden ml-auto flex-shrink-0"
