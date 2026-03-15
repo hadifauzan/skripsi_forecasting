@@ -541,6 +541,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     // Inventory Dashboard - Owner, Admin Inventory, Production Team
     Route::middleware(['role:owner,admin_inventory,production_team'])->group(function () {
         Route::get('/inventory-dashboard', [InventoryDashboardController::class, 'index'])->name('admin.inventory.dashboard');
+        Route::get('/inventory/raw-materials', [InventoryDashboardController::class, 'rawMaterials'])->name('admin.inventory.raw-materials');
+        Route::get('/inventory/raw-materials/{itemStock}', [InventoryDashboardController::class, 'getRawMaterialDetail']);
+        Route::put('/inventory/raw-materials/{itemStock}', [InventoryDashboardController::class, 'updateRawMaterial'])->name('admin.inventory.raw-materials.update');
     });
 });
 

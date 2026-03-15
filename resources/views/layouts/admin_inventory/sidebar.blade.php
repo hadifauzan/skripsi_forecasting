@@ -52,11 +52,19 @@
                     </button>
                     <ul id="inventory-menu-submenu" class="sidebar-text ml-8 mt-2 space-y-2 submenu-transition max-h-0">
                         <li>
+                            <a href="{{ route('admin.inventory.raw-materials') }}"
+                                class="group flex items-center px-4 py-2 rounded-lg transition-all duration-200
+                                {{ request()->routeIs('admin.inventory.raw-materials') ? 'bg-teal-600 text-white font-medium shadow-sm' : 'text-gray-300 hover:bg-teal-500 hover:text-white' }}">
+                                <x-heroicon-s-list-bullet class="w-4 h-4 mr-3 flex-shrink-0" />
+                                <span style="font-family: 'Nunito', sans-serif;">Data Bahan Baku</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{ Route::has('admin.inventory.index') ? route('admin.inventory.index') : route('admin.inventory.dashboard') }}"
                                 class="group flex items-center px-4 py-2 rounded-lg transition-all duration-200
                                 {{ request()->routeIs('admin.inventory.index') ? 'bg-teal-600 text-white font-medium shadow-sm' : 'text-gray-300 hover:bg-teal-500 hover:text-white' }}">
-                                <x-heroicon-s-list-bullet class="w-4 h-4 mr-3 flex-shrink-0" />
-                                <span style="font-family: 'Nunito', sans-serif;">Daftar Inventaris</span>
+                                <x-heroicon-s-squares-2x2 class="w-4 h-4 mr-3 flex-shrink-0" />
+                                <span style="font-family: 'Nunito', sans-serif;">Ringkasan Inventaris</span>
                             </a>
                         </li>
                         {{-- Tambah Inventaris - Owner dan Admin Inventory saja --}}

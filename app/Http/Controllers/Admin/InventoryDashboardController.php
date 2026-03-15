@@ -82,4 +82,113 @@ class InventoryDashboardController extends Controller
             'monthlyData', 'recentMasuk', 'recentKeluar', 'itemStocks'
         ));
     }
+
+    public function rawMaterials(Request $request)
+    {
+        $perPage = (int) $request->get('per_page', 10);
+        $search = $request->get('search', '');
+
+        // Query builder untuk raw materials dengan item dan inventory
+        $query = MasterItemStock::with(['item.category', 'inventory']);
+
+        // Filter berdasarkan search
+        if ($search) {
+            $query->whereHas('item', function ($q) use ($search) {
+                $q->where('name_item', 'like', "%{$search}%")
+                    ->orWhere('code_item', 'like', "%{$search}%");
+            })->orWhereHas('inventory', function ($q) use ($search) {
+                $q->where('name_inventory', 'like', "%{$search}%");
+            });
+        }
+
+        // Get paginated data
+        $itemStocks = $query->paginate($perPage);
+
+        // Format data untuk view
+        $rawMaterials = $itemStocks->through(function ($itemStock) {
+            $stock = $itemStock->stock;
+            $bufferStock = $itemStock->buffer_stock ?? 0;
+            $stockDifference = $stock - $bufferStock;
+            $needsOrder = $stockDifference < 0;
+
+            return [
+                'item_stock_id' => $itemStock->item_stock_id,
+                'name_item' => $itemStock->item->name_item ?? '-',
+                'code_item' => $itemStock->item->code_item ?? '',
+                'inventory' => $itemStock->inventory->name_inventory ?? '-',
+                'category' => $itemStock->item->category->name_category ?? '-',
+                'stock' => $stock,
+                'buffer_stock' => $bufferStock,
+                'stock_difference' => abs($stockDifference),
+                'needs_order' => $needsOrder
+            ];
+        });
+
+        // Hitung summary data
+        $allItemStocks = MasterItemStock::all();
+        $summary = [
+            'total' => $allItemStocks->count(),
+            'needs_order' => $allItemStocks->filter(function ($item) {
+                return ($item->stock - ($item->buffer_stock ?? 0)) < 0;
+            })->count(),
+            'sufficient' => $allItemStocks->filter(function ($item) {
+                return ($item->stock - ($item->buffer_stock ?? 0)) >= 0;
+            })->count(),
+        ];
+
+        return view('admin_inventory.raw_materials', compact(
+            'rawMaterials',
+            'summary',
+            'perPage',
+            'search'
+        ));
+    }
+
+    public function getRawMaterialDetail($itemStockId)
+    {
+        $itemStock = MasterItemStock::with(['item.category', 'inventory'])->find($itemStockId);
+
+        if (!$itemStock) {
+            return response()->json(['error' => 'Data tidak ditemukan'], 404);
+        }
+
+        $stock = $itemStock->stock;
+        $bufferStock = $itemStock->buffer_stock ?? 0;
+        $stockDifference = $stock - $bufferStock;
+        $needsOrder = $stockDifference < 0;
+
+        return response()->json([
+            'item_stock_id' => $itemStock->item_stock_id,
+            'name_item' => $itemStock->item->name_item ?? '-',
+            'code_item' => $itemStock->item->code_item ?? '',
+            'inventory' => $itemStock->inventory->name_inventory ?? '-',
+            'category' => $itemStock->item->category->name_category ?? '-',
+            'stock' => $stock,
+            'buffer_stock' => $bufferStock,
+            'stock_difference' => abs($stockDifference),
+            'needs_order' => $needsOrder
+        ]);
+    }
+
+    public function updateRawMaterial(Request $request, $itemStockId)
+    {
+        $request->validate([
+            'stock' => 'required|integer|min:0|max:9999999'
+        ]);
+
+        $itemStock = MasterItemStock::find($itemStockId);
+
+        if (!$itemStock) {
+            return response()->json(['error' => 'Data tidak ditemukan', 'success' => false], 404);
+        }
+
+        $itemStock->update([
+            'stock' => $request->stock
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Stok berhasil diperbarui'
+        ]);
+    }
 }

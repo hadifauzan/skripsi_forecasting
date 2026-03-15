@@ -1,0 +1,334 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# # Perhitungan Buffer Stock
+# 
+# Notebook ini menghitung buffer stock berdasarkan dataset penjualan dengan rumus:
+# 
+# **Buffer Stock = (Max Daily Sales × Max Lead Time) – (Avg Daily Sales × Avg Lead Time)**
+# 
+# Dimana:
+# - **Max Daily Sales**: Penjualan harian maksimum (jumlah barang tertinggi dalam 1 hari)
+# - **Max Lead Time**: Lead time maksimum yang mungkin terjadi
+# - **Avg Daily Sales**: Rata-rata penjualan harian
+# - **Avg Lead Time**: Rata-rata lead time normal
+# 
+
+# ## 1. Import Library
+
+# In[2]:
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set style untuk visualisasi
+sns.set_style('whitegrid')
+plt.rcParams['figure.figsize'] = (12, 6)
+
+
+# ## 2. Load Dataset
+
+# In[3]:
+
+
+# Load dataset
+file_path = 'Dataset_Forecasting_ARIMA_Lengkap.xlsx'
+dataset = pd.read_excel(file_path)
+
+# Tampilkan beberapa baris pertama
+print("Dataset Info:")
+print(dataset.head())
+print("\nJumlah data:", len(dataset))
+print("\nKolom dataset:", dataset.columns.tolist())
+
+
+# ## 3. Preprocessing Data
+
+# In[4]:
+
+
+# Convert Date column ke datetime format (coerce invalid values to NaT)
+dataset['Date'] = pd.to_datetime(dataset['Date'], errors='coerce')
+
+# Drop rows where Date could not be parsed (e.g. summary/header rows)
+invalid_dates = dataset['Date'].isna().sum()
+if invalid_dates > 0:
+    print(f"⚠️ Menghapus {invalid_dates} baris dengan nilai tanggal tidak valid")
+    dataset = dataset.dropna(subset=['Date'])
+
+# Sort berdasarkan tanggal
+dataset = dataset.sort_values('Date')
+
+# Reset index
+dataset = dataset.reset_index(drop=True)
+
+print("Data setelah preprocessing:")
+print(dataset.head())
+print("\nRentang Tanggal:")
+print(f"Tanggal Awal: {dataset['Date'].min()}")
+print(f"Tanggal Akhir: {dataset['Date'].max()}")
+
+
+# ## 4. Identifikasi Kolom Produk
+
+# In[5]:
+
+
+# Identifikasi kolom produk (semua kolom kecuali Date dan Total_Sales)
+product_columns = [col for col in dataset.columns if col not in ['Date', 'Total_Sales']]
+
+print("=" * 60)
+print("DAFTAR PRODUK YANG AKAN DIANALISIS")
+print("=" * 60)
+print(f"Jumlah produk: {len(product_columns)}")
+print(f"\nProduk: {', '.join(product_columns)}")
+print("=" * 60)
+
+
+# ## 5. Hitung Statistik Pemakaian Harian per Produk
+
+# In[12]:
+
+
+# Hitung statistik untuk setiap produk
+product_stats = pd.DataFrame()
+
+for product in product_columns:
+    stats = {
+        'Produk': product,
+        'Pemakaian_Maksimum': dataset[product].quantile(0.95),  # Persentil ke-95, tahan outlier
+        'Pemakaian_Rata_rata': dataset[product].mean(),
+        'Standar_Deviasi': dataset[product].std()
+    }
+    product_stats = pd.concat([product_stats, pd.DataFrame([stats])], ignore_index=True)
+
+print("=" * 80)
+print("STATISTIK PEMAKAIAN HARIAN PER PRODUK")
+print("=" * 80)
+print(product_stats.to_string(index=False))
+print("=" * 80)
+
+# Tampilkan top 5 produk berdasarkan pemakaian rata-rata
+print("\nTOP 5 PRODUK BERDASARKAN PEMAKAIAN RATA-RATA:")
+print(product_stats.nlargest(5, 'Pemakaian_Rata_rata')[['Produk', 'Pemakaian_Rata_rata', 'Pemakaian_Maksimum']].to_string(index=False))
+
+
+# ## 6. Definisi Lead Time
+
+# In[7]:
+
+
+# Definisi Lead Time
+avg_lead_time = 5.4   # hari (rata-rata)
+max_lead_time = 7     # hari (maksimum / worst case)
+
+print("=" * 60)
+print("KOMPONEN LEAD TIME")
+print("=" * 60)
+print(f"  Avg Lead Time (Normal)      : {avg_lead_time} hari")
+print(f"  Max Lead Time (Worst Case)  : {max_lead_time} hari")
+print("=" * 60)
+
+
+# ## 7. Perhitungan Buffer Stock per Produk
+# 
+# **Rumus:** `Buffer Stock = (Max Daily Sales × Max Lead Time) – (Avg Daily Sales × Avg Lead Time)`
+# 
+
+# In[13]:
+
+
+# Hitung Buffer Stock untuk setiap produk menggunakan rumus:
+# Buffer Stock = (Max Daily Sales × Max Lead Time) – (Avg Daily Sales × Avg Lead Time)
+
+# Pastikan Pemakaian_Maksimum selalu >= Pemakaian_Rata_rata (hindari buffer negatif)
+product_stats['Pemakaian_Maksimum'] = product_stats[['Pemakaian_Maksimum', 'Pemakaian_Rata_rata']].max(axis=1)
+
+product_stats['Buffer_Stock'] = (
+    (product_stats['Pemakaian_Maksimum'] * max_lead_time) -
+    (product_stats['Pemakaian_Rata_rata'] * avg_lead_time)
+).clip(lower=0)  # Buffer stock tidak boleh negatif
+
+print("=" * 90)
+print("PERHITUNGAN BUFFER STOCK PER PRODUK")
+print("=" * 90)
+print(f"Rumus: (Max Daily Sales × Max Lead Time) – (Avg Daily Sales × Avg Lead Time)")
+print(f"       Max Lead Time = {max_lead_time} hari | Avg Lead Time = {avg_lead_time} hari")
+print(f"       Max Daily Sales = max(Persentil-95, Rata-rata) → Tidak ada nilai negatif")
+print("=" * 90)
+print(product_stats[['Produk', 'Pemakaian_Maksimum', 'Pemakaian_Rata_rata', 'Buffer_Stock']].to_string(index=False))
+print("=" * 90)
+
+# Tampilkan produk dengan buffer stock tertinggi
+print("\n📦 TOP 10 PRODUK DENGAN BUFFER STOCK TERTINGGI:")
+print(product_stats.nlargest(10, 'Buffer_Stock')[['Produk', 'Pemakaian_Maksimum', 'Pemakaian_Rata_rata', 'Buffer_Stock']].to_string(index=False))
+
+
+# ## 8. Safety Stock per Produk (Perhitungan Tambahan)
+# 
+# Sebagai perbandingan, kita juga dapat menghitung Safety Stock menggunakan metode standar deviasi:
+# 
+# **Safety Stock = Z-score × Standard Deviation × √Lead Time**
+# 
+# Dimana Z-score untuk service level 95% = 1.65
+
+# In[16]:
+
+
+# Hitung Safety Stock untuk setiap produk (metode alternatif)
+z_score = 1.65  # untuk service level 95%
+product_stats['Safety_Stock_95%'] = z_score * product_stats['Standar_Deviasi'] * np.sqrt(avg_lead_time)
+
+print("=" * 80)
+print("PERHITUNGAN SAFETY STOCK PER PRODUK (Service Level 95%)")
+print("=" * 80)
+print(f"Z-score: {z_score} | √Avg Lead Time: {np.sqrt(avg_lead_time):.4f}")
+print("=" * 80)
+print(product_stats[['Produk', 'Standar_Deviasi', 'Safety_Stock_95%']].to_string(index=False))
+print("=" * 80)
+
+# Perbandingan Buffer Stock vs Safety Stock
+comparison_df = product_stats.nlargest(10, 'Buffer_Stock')[['Produk', 'Buffer_Stock', 'Safety_Stock_95%']]
+print("\n📊 PERBANDINGAN BUFFER STOCK vs SAFETY STOCK (Top 10):")
+print(comparison_df.to_string(index=False))
+
+
+# ## 9. Visualisasi Buffer Stock per Produk
+
+# In[17]:
+
+
+# Visualisasi Buffer Stock per Produk
+fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+
+# Plot 1: Top 15 Produk dengan Buffer Stock Tertinggi
+top_15_buffer = product_stats.nlargest(15, 'Buffer_Stock').sort_values('Buffer_Stock', ascending=True)
+axes[0, 0].barh(top_15_buffer['Produk'], top_15_buffer['Buffer_Stock'], color='coral', edgecolor='black')
+axes[0, 0].set_title('Top 15 Produk dengan Buffer Stock Tertinggi', fontsize=12, fontweight='bold')
+axes[0, 0].set_xlabel('Buffer Stock (unit)')
+axes[0, 0].grid(True, axis='x', alpha=0.3)
+
+# Plot 2: Perbandingan Buffer Stock vs Safety Stock (Top 10)
+top_10_comparison = product_stats.nlargest(10, 'Buffer_Stock')
+x_pos = np.arange(len(top_10_comparison))
+width = 0.35
+
+axes[0, 1].bar(x_pos - width/2, top_10_comparison['Buffer_Stock'], width, label='Buffer Stock', color='coral', edgecolor='black')
+axes[0, 1].bar(x_pos + width/2, top_10_comparison['Safety_Stock_95%'], width, label='Safety Stock', color='lightgreen', edgecolor='black')
+axes[0, 1].set_title('Perbandingan Buffer Stock vs Safety Stock (Top 10)', fontsize=12, fontweight='bold')
+axes[0, 1].set_xlabel('Produk')
+axes[0, 1].set_ylabel('Jumlah (unit)')
+axes[0, 1].set_xticks(x_pos)
+axes[0, 1].set_xticklabels(top_10_comparison['Produk'], rotation=45, ha='right')
+axes[0, 1].legend()
+axes[0, 1].grid(True, axis='y', alpha=0.3)
+
+# Plot 3: Distribusi Pemakaian Rata-rata per Produk
+axes[1, 0].hist(product_stats['Pemakaian_Rata_rata'], bins=20, color='skyblue', edgecolor='black', alpha=0.7)
+axes[1, 0].set_title('Distribusi Pemakaian Rata-rata per Produk', fontsize=12, fontweight='bold')
+axes[1, 0].set_xlabel('Pemakaian Rata-rata (unit/hari)')
+axes[1, 0].set_ylabel('Jumlah Produk')
+axes[1, 0].grid(True, alpha=0.3)
+
+# Plot 4: Scatter Plot - Pemakaian Rata-rata vs Buffer Stock
+axes[1, 1].scatter(product_stats['Pemakaian_Rata_rata'], product_stats['Buffer_Stock'], 
+                   s=100, alpha=0.6, c='steelblue', edgecolor='black')
+axes[1, 1].set_title('Hubungan Pemakaian Rata-rata vs Buffer Stock', fontsize=12, fontweight='bold')
+axes[1, 1].set_xlabel('Pemakaian Rata-rata (unit/hari)')
+axes[1, 1].set_ylabel('Buffer Stock (unit)')
+axes[1, 1].grid(True, alpha=0.3)
+
+# Tambahkan label untuk produk dengan buffer stock tertinggi
+top_5_label = product_stats.nlargest(5, 'Buffer_Stock')
+for idx, row in top_5_label.iterrows():
+    axes[1, 1].annotate(row['Produk'], 
+                       (row['Pemakaian_Rata_rata'], row['Buffer_Stock']),
+                       xytext=(5, 5), textcoords='offset points', 
+                       fontsize=8, alpha=0.7)
+
+plt.tight_layout()
+plt.show()
+
+
+# ## 10. Ringkasan Hasil & Rekomendasi
+
+# In[18]:
+
+
+# Ringkasan Statistik Keseluruhan
+total_buffer_stock = product_stats['Buffer_Stock'].sum()
+total_safety_stock = product_stats['Safety_Stock_95%'].sum()
+avg_buffer_stock = product_stats['Buffer_Stock'].mean()
+
+print("\n" + "=" * 80)
+print("RINGKASAN HASIL PERHITUNGAN BUFFER STOCK")
+print("=" * 80)
+print(f"Rumus        : (Max Daily Sales × Max Lead Time) – (Avg Daily Sales × Avg Lead Time)")
+print(f"Jumlah Produk Dianalisis        : {len(product_stats)} produk")
+print(f"Avg Lead Time                   : {avg_lead_time} hari")
+print(f"Max Lead Time                   : {max_lead_time} hari")
+print(f"Total Buffer Stock (Semua Produk): {total_buffer_stock:.2f} unit")
+print(f"Total Safety Stock (Semua Produk): {total_safety_stock:.2f} unit")
+print(f"Rata-rata Buffer Stock per Produk: {avg_buffer_stock:.2f} unit")
+print("=" * 80)
+
+print("\n📊 TOP 10 PRODUK PRIORITAS UNTUK BUFFER STOCK:")
+print("=" * 80)
+top_10 = product_stats.nlargest(10, 'Buffer_Stock')[['Produk', 'Pemakaian_Rata_rata', 'Pemakaian_Maksimum', 'Buffer_Stock', 'Safety_Stock_95%']]
+top_10_display = top_10.copy()
+top_10_display.columns = ['Produk', 'Avg Daily Sales', 'Max Daily Sales', 'Buffer Stock', 'Safety Stock']
+print(top_10_display.to_string(index=False))
+print("=" * 80)
+
+print("\n💡 REKOMENDASI:")
+print("-" * 80)
+print(f"1. Prioritaskan produk dengan buffer stock tertinggi untuk dijaga ketersediaannya")
+print(f"2. Total buffer stock yang diperlukan untuk semua produk: {total_buffer_stock:.2f} unit")
+print(f"3. Produk dengan buffer stock > {avg_buffer_stock:.0f} unit memerlukan perhatian khusus")
+print(f"4. Tinjau ulang buffer stock secara berkala sesuai perubahan pola permintaan")
+print("=" * 80)
+
+
+# ## 11. Export Hasil ke CSV
+
+# In[ ]:
+
+
+# Siapkan dataframe untuk export dengan informasi lengkap
+export_df = product_stats.copy()
+export_df.columns = [
+    'Produk',
+    'Max_Daily_Sales',
+    'Avg_Daily_Sales',
+    'Standar_Deviasi',
+    'Buffer_Stock_Unit',
+    'Safety_Stock_95percent_Unit'
+]
+
+# Tambahkan informasi lead time ke dalam dataframe export
+export_df['Avg_Lead_Time_Hari'] = avg_lead_time
+export_df['Max_Lead_Time_Hari'] = max_lead_time
+
+# Tambahkan kolom keterangan rumus
+export_df['Rumus'] = f'(Max Daily Sales x {max_lead_time}) - (Avg Daily Sales x {avg_lead_time})'
+
+# Urutkan berdasarkan buffer stock tertinggi
+export_df = export_df.sort_values('Buffer_Stock_Unit', ascending=False)
+
+# Round semua angka ke 2 desimal
+numeric_columns = export_df.select_dtypes(include=[np.number]).columns
+export_df[numeric_columns] = export_df[numeric_columns].round(2)
+
+# Save to CSV
+output_file = 'buffer_stock_per_produk.csv'
+export_df.to_csv(output_file, index=False, encoding='utf-8-sig')
+
+print(f"✅ Hasil analisis buffer stock per produk berhasil disimpan ke:")
+print(f"   {output_file}")
+print(f"\n📊 Total: {len(export_df)} produk")
+print(f"\nPreview 10 produk teratas:")
+print(export_df[['Produk', 'Avg_Daily_Sales', 'Max_Daily_Sales', 'Buffer_Stock_Unit']].head(10).to_string(index=False))
+

@@ -16,13 +16,15 @@ class MasterItemStock extends Model
     protected $fillable = [
         'item_id',
         'inventory_id',
-        'stock'
+        'stock',
+        'buffer_stock'
     ];
 
     protected $casts = [
         'item_id' => 'integer',
         'inventory_id' => 'integer',
-        'stock' => 'integer'
+        'stock' => 'integer',
+        'buffer_stock' => 'integer'
     ];
 
     // Relationship dengan item
