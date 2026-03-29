@@ -2,6 +2,8 @@
 
 @section('title', 'Data Bahan Baku')
 
+@include('components.buffer_stock_info')
+
 @section('content')
 <div class="min-h-screen bg-gray-100 pb-10">
     <section class="bg-[#d3ebf4] border-b border-[#b9dbe8]">
@@ -46,17 +48,10 @@
                 <h2 class="text-2xl font-semibold text-slate-800">Data Bahan Baku</h2>
 
                 <div class="flex items-center gap-3 w-full sm:w-auto">
-                    @if(Route::has('admin.inventory.create'))
-                        <a href="{{ route('admin.inventory.create') }}"
-                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded text-lg transition-colors duration-200">
-                            Tambah
-                        </a>
-                    @else
-                        <button type="button"
-                            class="bg-indigo-400 text-white font-medium px-4 py-2 rounded text-lg cursor-not-allowed" disabled>
-                            Tambah
-                        </button>
-                    @endif
+                    <button type="button" onclick="openCreateModal()"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded text-lg transition-colors duration-200">
+                        Tambah
+                    </button>
 
                     <form method="GET" action="{{ route('admin.inventory.raw-materials') }}" class="w-full sm:w-80 flex items-center gap-2">
                         <select
@@ -106,7 +101,7 @@
                                 </td>
                                 <td class="py-4 pr-5 align-top">{{ $row['category'] }}</td>
                                 <td class="py-4 pr-5 align-top">{{ number_format($row['stock']) }}</td>
-                                <td class="py-4 pr-5 align-top">{{ number_format($row['buffer_stock']) }}</td>
+                                <td class="py-4 pr-5 align-top buffer-stock-cell" data-product-name="{{ $row['name_item'] }}">{{ number_format($row['buffer_stock']) }}</td>
                                 <td class="py-4 pr-5 align-top">
                                     <span class="inline-block min-w-14 text-center px-3 py-1 text-white text-xl rounded-sm {{ $row['needs_order'] ? 'bg-red-500' : 'bg-emerald-500' }}">
                                         {{ $row['needs_order'] ? '⚠ ' . abs($row['stock_difference']) : '✓ ' . $row['stock_difference'] }}
@@ -171,7 +166,8 @@
             <button type="button" onclick="closeDetailModal()" class="px-4 py-2 rounded border border-gray-300 text-slate-700 hover:bg-gray-50">
                 Tutup
             </button>
-            <button type="button" id="editFromDetailBtn" class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">
+            <button type="button" id="editFromDetailBtn"
+             class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">
                 Edit Stok
             </button>
         </div>
@@ -232,8 +228,172 @@
     </div>
 </div>
 
+<!-- Create Modal -->
+<div id="createModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg max-w-md w-full max-h-screen overflow-y-auto">
+        <div class="bg-[#d3ebf4] border-b border-[#b9dbe8] px-6 py-4 sticky top-0">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-slate-800">Tambah Bahan Baku</h2>
+                <button type="button" onclick="closeCreateModal()" class="text-slate-500 hover:text-slate-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <form id="createForm" method="POST" class="p-6 space-y-4">
+            @csrf
+            
+            <div>
+                <label for="createItem" class="block text-sm font-medium text-slate-700 mb-1">Item</label>
+                <select
+                    id="createItem"
+                    name="item_id"
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-200"
+                    required
+                >
+                    <option value="">-- Pilih Item --</option>
+                </select>
+                <p id="createItemError" class="text-red-600 text-sm mt-1 hidden"></p>
+            </div>
+
+            <div>
+                <label for="createInventory" class="block text-sm font-medium text-slate-700 mb-1">Inventori</label>
+                <select
+                    id="createInventory"
+                    name="inventory_id"
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-200"
+                    required
+                >
+                    <option value="">-- Pilih Inventori --</option>
+                </select>
+                <p id="createInventoryError" class="text-red-600 text-sm mt-1 hidden"></p>
+            </div>
+
+            <div>
+                <label for="createStock" class="block text-sm font-medium text-slate-700 mb-1">Stock</label>
+                <input
+                    id="createStock"
+                    type="number"
+                    name="stock"
+                    min="0"
+                    max="9999999"
+                    value="0"
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-200"
+                    required
+                >
+                <p id="createStockError" class="text-red-600 text-sm mt-1 hidden"></p>
+            </div>
+
+            <div>
+                <label for="createBufferStock" class="block text-sm font-medium text-slate-700 mb-1">Buffer Stock</label>
+                <input
+                    id="createBufferStock"
+                    type="number"
+                    name="buffer_stock"
+                    min="0"
+                    max="9999999"
+                    value="0"
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-200"
+                    required
+                >
+                <p id="createBufferStockError" class="text-red-600 text-sm mt-1 hidden"></p>
+            </div>
+
+            <p id="createError" class="text-red-600 text-sm mt-1 hidden"></p>
+
+            <div class="bg-gray-50 -mx-6 -mb-6 px-6 py-4 border-t border-gray-200 flex gap-3 justify-end sticky bottom-0">
+                <button type="button" onclick="closeCreateModal()" class="px-4 py-2 rounded border border-gray-300 text-slate-700 hover:bg-gray-50">
+                    Batal
+                </button>
+                <button type="submit" class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 flex items-center gap-2">
+                    <span id="createSubmitText">Tambah</span>
+                    <span id="createSubmitSpinner" class="hidden animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
 let currentItemStockId = null;
+
+// Fetch dan update buffer stock tabel dari API
+async function initializeBufferStockData() {
+    try {
+        console.log('===== Initializing Buffer Stock Data =====');
+        
+        // Tunggu cache dari fetchBufferStresFromAPI
+        let cache = await fetchBufferStresFromAPI();
+        
+        console.log('Total cache items:', Object.keys(cache).length);
+        console.log('Cache keys:', Object.keys(cache));
+        
+        // Jika cache kosong, coba tunggu sebentar dan fetch lagi
+        if (Object.keys(cache).length === 0) {
+            console.warn('Cache is empty, retrying...');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            cache = await fetchBufferStresFromAPI();
+        }
+        
+        updateTableWithBufferStock(cache);
+    } catch (error) {
+        console.error('Error initializing buffer stock data:', error);
+    }
+}
+
+function updateTableWithBufferStock(cache) {
+    // Get all buffer stock cells
+    const cells = document.querySelectorAll('.buffer-stock-cell');
+    console.log('Found buffer stock cells:', cells.length);
+    
+    if (cells.length === 0) {
+        console.warn('No buffer stock cells found in table');
+        return;
+    }
+    
+    let updated = 0;
+    let notFound = 0;
+    
+    cells.forEach((cell, index) => {
+        const productName = cell.getAttribute('data-product-name');
+        console.log(`\nCell ${index}:`);
+        console.log(`  Product name: "${productName}"`);
+        console.log(`  Product name: "${productName}"`);
+        
+        if (!productName) {
+            console.warn('  ✗ No product name attribute');
+            return;
+        }
+        
+        if (cache[productName]) {
+            const bufferStock = cache[productName];
+            const value = typeof bufferStock === 'number' ? bufferStock : bufferStock.buffer_stock;
+            console.log(`  ✓ Found in cache, buffer stock: ${value}`);
+            cell.textContent = Number(value).toLocaleString('id-ID');
+            updated++;
+        } else {
+            console.log(`  ✗ Not found in cache`);
+            console.log(`  Available products sample:`, Object.keys(cache).slice(0, 5));
+            notFound++;
+        }
+    });
+    
+    console.log(`\n===== Update Summary =====`);
+    console.log(`Updated: ${updated}/${cells.length}`);
+    console.log(`Not found: ${notFound}/${cells.length}`);
+}
+
+// Initialize saat page load dengan delay
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(initializeBufferStockData, 500);
+    });
+} else {
+    // Page sudah selesai loading
+    setTimeout(initializeBufferStockData, 500);
+}
 
 async function openDetailModal(itemStockId) {
     currentItemStockId = itemStockId;
@@ -281,6 +441,43 @@ async function openDetailModal(itemStockId) {
                 </div>
             </div>
         `;
+
+        // Get buffer stock dari cache yang sudah di-load
+        const productName = data.name_item;
+        try {
+            const cache = await fetchBufferStresFromAPI();
+            const apiBufferStock = cache[productName];
+
+            if (apiBufferStock) {
+                const apiContent = document.createElement('div');
+                apiContent.className = 'mt-6 pt-4 border-t border-gray-200';
+                
+                const bufferValue = typeof apiBufferStock === 'number' ? apiBufferStock : apiBufferStock.buffer_stock;
+                const avgDailySales = apiBufferStock.avg_daily_sales || '-';
+                const maxDailySales = apiBufferStock.max_daily_sales || '-';
+                const safetyStock = apiBufferStock.safety_stock || '-';
+                
+                apiContent.innerHTML = `
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+                        <div class="flex items-start justify-between mb-2">
+                            <p class="text-sm font-bold text-blue-900">📊 Forecasting Analysis</p>
+                            <button type="button" onclick="showBufferStockInfoModal()" class="text-xs text-blue-600 hover:text-blue-800 underline">
+                                Learn More
+                            </button>
+                        </div>
+                        <div class="text-sm text-blue-800 space-y-1.5">
+                            <p><strong>Calculated Buffer:</strong> <span class="font-mono font-bold">${Number(bufferValue).toLocaleString('id-ID')}</span> unit</p>
+                            ${avgDailySales !== '-' ? `<p><strong>Avg Daily Sales:</strong> <span class="font-mono">${typeof avgDailySales === 'number' ? avgDailySales.toFixed(2) : avgDailySales}</span> unit/day</p>` : ''}
+                            ${maxDailySales !== '-' ? `<p><strong>Max Daily Sales:</strong> <span class="font-mono">${typeof maxDailySales === 'number' ? maxDailySales.toFixed(2) : maxDailySales}</span> unit/day</p>` : ''}
+                            ${safetyStock !== '-' ? `<p><strong>Safety Stock:</strong> <span class="font-mono">${Number(safetyStock).toLocaleString('id-ID')}</span> unit</p>` : ''}
+                        </div>
+                    </div>
+                `;
+                content.appendChild(apiContent);
+            }
+        } catch (error) {
+            console.error('Error fetching buffer stock:', error);
+        }
 
         document.getElementById('editFromDetailBtn').onclick = function() {
             closeDetailModal();
@@ -364,6 +561,133 @@ document.getElementById('editForm').addEventListener('submit', async function(e)
         console.error('Error:', error);
         document.getElementById('editError').textContent = 'Terjadi kesalahan saat menyimpan';
         document.getElementById('editError').classList.remove('hidden');
+    } finally {
+        submitText.classList.remove('hidden');
+        submitSpinner.classList.add('hidden');
+        submitBtn.disabled = false;
+    }
+});
+
+// Create Modal Functions
+async function openCreateModal() {
+    const modal = document.getElementById('createModal');
+    const itemSelect = document.getElementById('createItem');
+    const inventorySelect = document.getElementById('createInventory');
+    
+    modal.classList.remove('hidden');
+    
+    // Clear form
+    document.getElementById('createForm').reset();
+    document.getElementById('createError').classList.add('hidden');
+    document.getElementById('createItemError').classList.add('hidden');
+    document.getElementById('createInventoryError').classList.add('hidden');
+    document.getElementById('createStockError').classList.add('hidden');
+    document.getElementById('createBufferStockError').classList.add('hidden');
+
+    // Load items and inventories
+    try {
+        const response = await fetch('/admin/inventory/raw-materials/create/form-data');
+        const data = await response.json();
+
+        // Populate items
+        itemSelect.innerHTML = '<option value="">-- Pilih Item --</option>';
+        data.items.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.item_id;
+            option.textContent = `${item.name_item}${item.code_item ? ` (${item.code_item})` : ''}`;
+            itemSelect.appendChild(option);
+        });
+
+        // Populate inventories
+        inventorySelect.innerHTML = '<option value="">-- Pilih Inventori --</option>';
+        data.inventories.forEach(inventory => {
+            const option = document.createElement('option');
+            option.value = inventory.inventory_id;
+            option.textContent = inventory.name_inventory;
+            inventorySelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('createError').textContent = 'Gagal memuat data form';
+        document.getElementById('createError').classList.remove('hidden');
+    }
+}
+
+function closeCreateModal() {
+    document.getElementById('createModal').classList.add('hidden');
+}
+
+document.getElementById('createForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const itemId = document.getElementById('createItem').value;
+    const inventoryId = document.getElementById('createInventory').value;
+    const stock = document.getElementById('createStock').value;
+    const bufferStock = document.getElementById('createBufferStock').value;
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const submitText = document.getElementById('createSubmitText');
+    const submitSpinner = document.getElementById('createSubmitSpinner');
+
+    // Clear errors
+    document.getElementById('createError').classList.add('hidden');
+    document.getElementById('createItemError').classList.add('hidden');
+    document.getElementById('createInventoryError').classList.add('hidden');
+    document.getElementById('createStockError').classList.add('hidden');
+    document.getElementById('createBufferStockError').classList.add('hidden');
+
+    submitText.classList.add('hidden');
+    submitSpinner.classList.remove('hidden');
+    submitBtn.disabled = true;
+
+    try {
+        const response = await fetch('/admin/inventory/raw-materials', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || 
+                                document.querySelector('input[name="_token"]')?.value
+            },
+            body: JSON.stringify({
+                item_id: itemId,
+                inventory_id: inventoryId,
+                stock: stock,
+                buffer_stock: bufferStock
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+            closeCreateModal();
+            location.reload();
+        } else {
+            if (data.errors) {
+                // Handle validation errors
+                if (data.errors.item_id) {
+                    document.getElementById('createItemError').textContent = data.errors.item_id[0];
+                    document.getElementById('createItemError').classList.remove('hidden');
+                }
+                if (data.errors.inventory_id) {
+                    document.getElementById('createInventoryError').textContent = data.errors.inventory_id[0];
+                    document.getElementById('createInventoryError').classList.remove('hidden');
+                }
+                if (data.errors.stock) {
+                    document.getElementById('createStockError').textContent = data.errors.stock[0];
+                    document.getElementById('createStockError').classList.remove('hidden');
+                }
+                if (data.errors.buffer_stock) {
+                    document.getElementById('createBufferStockError').textContent = data.errors.buffer_stock[0];
+                    document.getElementById('createBufferStockError').classList.remove('hidden');
+                }
+            } else {
+                document.getElementById('createError').textContent = data.message || 'Gagal menambahkan data';
+                document.getElementById('createError').classList.remove('hidden');
+            }
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('createError').textContent = 'Terjadi kesalahan saat menambahkan data';
+        document.getElementById('createError').classList.remove('hidden');
     } finally {
         submitText.classList.remove('hidden');
         submitSpinner.classList.add('hidden');

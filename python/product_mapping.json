@@ -1,0 +1,197 @@
+{
+  "generated_from": "product_mapping_generator.py",
+  "excel_file": "Dataset_Forecasting_ARIMA_Lengkap.xlsx",
+  "instructions": "Update the \"mapped_to\" value untuk setiap produk dengan nama_item yang benar dari database",
+  "products": {
+    "AERIS10": {
+      "mapped_to": null,
+      "item_id": null,
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-BB-10": {
+      "mapped_to": "Gentle Baby Bye Bugs 10ml",
+      "item_id": "13",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-BB-30": {
+      "mapped_to": "Gentle Baby Bye Bugs 30ml",
+      "item_id": "14",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "BR45": {
+      "mapped_to": null,
+      "item_id": null,
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "BR75": {
+      "mapped_to": null,
+      "item_id": null,
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-TP-CC": {
+      "mapped_to": "Gentle Twin Pack Common Cold",
+      "item_id": "36",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-CNF-30": {
+      "mapped_to": "Gentle Baby Cough n Flu 30ml",
+      "item_id": "10",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-CNF-10": {
+      "mapped_to": "Gentle Baby Cough n Flu 10ml",
+      "item_id": "9",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-CNF-100": {
+      "mapped_to": "Gentle Baby Cough n Flu 100ml",
+      "item_id": "11",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-CNF-250": {
+      "mapped_to": "Gentle Baby Cough n Flu 250ml",
+      "item_id": "12",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-DS-30": {
+      "mapped_to": "Gentle Baby Deep Sleep 30ml",
+      "item_id": "2",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-DS-10": {
+      "mapped_to": "Gentle Baby Deep Sleep 10ml",
+      "item_id": "1",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-DS-100": {
+      "mapped_to": "Gentle Baby Deep Sleep 100ml",
+      "item_id": "3",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-DS-250": {
+      "mapped_to": "Gentle Baby Deep Sleep 250ml",
+      "item_id": "4",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "EC45": {
+      "mapped_to": null,
+      "item_id": null,
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "EC75": {
+      "mapped_to": null,
+      "item_id": null,
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-GF-30": {
+      "mapped_to": "Gentle Baby Gimme Food 30ml",
+      "item_id": "17",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-GF-10": {
+      "mapped_to": "Gentle Baby Gimme Food 10ml",
+      "item_id": "16",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-GF-250": {
+      "mapped_to": "Gentle Baby Gimme Food 250ml",
+      "item_id": "19",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-IB-30": {
+      "mapped_to": "Gentle Baby Immboost 30ml",
+      "item_id": "33",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-IB-10": {
+      "mapped_to": "Gentle Baby Immboost 10ml",
+      "item_id": "32",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-IB-100": {
+      "mapped_to": "Gentle Baby Immboost 100ml",
+      "item_id": "34",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-JOY-30": {
+      "mapped_to": "Gentle Baby Joy 30ml",
+      "item_id": "6",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-JOY-10": {
+      "mapped_to": "Gentle Baby Joy 10ml",
+      "item_id": "5",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-JOY-100": {
+      "mapped_to": "Gentle Baby Joy 100ml",
+      "item_id": "7",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-LDR-30": {
+      "mapped_to": "Gentle Baby LDR Booster 30ml",
+      "item_id": "25",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-LDR-10": {
+      "mapped_to": "Gentle Baby LDR Booster 10ml",
+      "item_id": "24",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-LDR-250": {
+      "mapped_to": "Gentle Baby LDR Booster 250ml",
+      "item_id": "27",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-MYB-30": {
+      "mapped_to": "Gentle Baby Massage Your Baby 30ml",
+      "item_id": "29",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-MYB-10": {
+      "mapped_to": "Gentle Baby Massage Your Baby 10ml",
+      "item_id": "28",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-MYB-100": {
+      "mapped_to": "Gentle Baby Massage Your Baby 100ml",
+      "item_id": "30",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-TP-NB": {
+      "mapped_to": "Gentle Twin Pack New Born",
+      "item_id": "37",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-TC-30": {
+      "mapped_to": "Gentle Baby Tummy Calmer 30ml",
+      "item_id": "21",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-TC-10": {
+      "mapped_to": "Gentle Baby Tummy Calmer 10ml",
+      "item_id": "20",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-TC-100": {
+      "mapped_to": "Gentle Baby Tummy Calmer 100ml",
+      "item_id": "22",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-TC-250": {
+      "mapped_to": "Gentle Baby Tummy Calmer 250ml",
+      "item_id": "23",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "TEETH10": {
+      "mapped_to": null,
+      "item_id": null,
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    },
+    "GB-TP-TV": {
+      "mapped_to": "Gentle Twin Pack Travel Pack",
+      "item_id": "38",
+      "notes": "Cari nama yang cocok dari database dan isi field ini"
+    }
+  }
+}

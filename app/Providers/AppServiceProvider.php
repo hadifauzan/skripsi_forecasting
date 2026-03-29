@@ -29,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
             $currentUser = null;
             $isAdmin = false;
             $isCustomer = false;
+            $hasInventoryAccess = false;
             
             // Force check authentication state without cache
             try {
@@ -52,6 +53,8 @@ class AppServiceProvider extends ServiceProvider
                     if ($webUser) {
                         $currentUser = $webUser;
                         $isAdmin = isset($webUser->role) && in_array($webUser->role, ['admin', 'superadmin']);
+                        // Check if user has inventory access (role_id 10, 11, 12)
+                        $hasInventoryAccess = isset($webUser->role_id) && in_array($webUser->role_id, [10, 11, 12]);
                         // Calculate cart count for web users
                         try {
                             $cartCount = Cart::where('user_id', $webUser->user_id)->sum('quantity') ?? 0;
@@ -65,6 +68,7 @@ class AppServiceProvider extends ServiceProvider
                 $currentUser = null;
                 $isAdmin = false;
                 $isCustomer = false;
+                $hasInventoryAccess = false;
                 $cartCount = 0;
             }
             
@@ -72,7 +76,8 @@ class AppServiceProvider extends ServiceProvider
                 'cartCount' => $cartCount,
                 'currentUser' => $currentUser,
                 'isAdmin' => $isAdmin,
-                'isCustomer' => $isCustomer
+                'isCustomer' => $isCustomer,
+                'hasInventoryAccess' => $hasInventoryAccess
             ]);
         });
 

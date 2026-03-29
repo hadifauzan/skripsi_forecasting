@@ -20,7 +20,7 @@ class MasterItemSeeder extends Seeder
             // Deep Sleep - 10ml, 30ml, 100ml, 250ml
             [
                 'company_id' => 3,
-                'code_item' => 'GB-DS',
+                'code_item' => 'GB-DS-10',
                 'name_item' => 'Gentle Baby Deep Sleep 10ml',
                 'description_item' => 'Minyak bayi untuk membantu bayi tidur nyenyak',
                 'ingredient_item' => 'Minyak Lavender, Minyak Chamomile, Minyak Kelapa',
@@ -34,7 +34,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-DS-01',
+                'code_item' => 'GB-DS-30',
                 'name_item' => 'Gentle Baby Deep Sleep 30ml',
                 'description_item' => 'Minyak bayi untuk membantu bayi tidur nyenyak',
                 'ingredient_item' => 'Minyak Lavender, Minyak Chamomile, Minyak Kelapa',
@@ -48,7 +48,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-DS-02',
+                'code_item' => 'GB-DS-100',
                 'name_item' => 'Gentle Baby Deep Sleep 100ml',
                 'description_item' => 'Minyak bayi untuk membantu bayi tidur nyenyak',
                 'ingredient_item' => 'Minyak Lavender, Minyak Chamomile, Minyak Kelapa',
@@ -62,7 +62,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-DS-03',
+                'code_item' => 'GB-DS-250',
                 'name_item' => 'Gentle Baby Deep Sleep 250ml',
                 'description_item' => 'Minyak bayi untuk membantu bayi tidur nyenyak',
                 'ingredient_item' => 'Minyak Lavender, Minyak Chamomile, Minyak Kelapa',
@@ -79,7 +79,7 @@ class MasterItemSeeder extends Seeder
             // Joy - 10ml, 30ml, 100ml, 250ml
             [
                 'company_id' => 3,
-                'code_item' => 'GB-JOY',
+                'code_item' => 'GB-JOY-10',
                 'name_item' => 'Gentle Baby Joy 10ml',
                 'description_item' => 'Minyak bayi untuk meningkatkan mood anak',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -93,7 +93,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-JOY-01',
+                'code_item' => 'GB-JOY-30',
                 'name_item' => 'Gentle Baby Joy 30ml',
                 'description_item' => 'Minyak bayi untuk meningkatkan mood anak',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -107,7 +107,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-JOY-02',
+                'code_item' => 'GB-JOY-100',
                 'name_item' => 'Gentle Baby Joy 100ml',
                 'description_item' => 'Minyak bayi untuk meningkatkan mood anak',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -121,7 +121,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-JOY-03',
+                'code_item' => 'GB-JOY-250',
                 'name_item' => 'Gentle Baby Joy 250ml',
                 'description_item' => 'Minyak bayi untuk meningkatkan mood anak',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -138,7 +138,7 @@ class MasterItemSeeder extends Seeder
             // Cough n Flu - 10ml, 30ml, 100ml, 250ml
             [
                 'company_id' => 3,
-                'code_item' => 'GB-CNF',
+                'code_item' => 'GB-CNF-10',
                 'name_item' => 'Gentle Baby Cough n Flu 10ml',
                 'description_item' => 'Minyak bayi yang membantu meredakan batuk dan flu pada anak bayi',
                 'ingredient_item' => 'Minyak Eucalyptus, Minyak Lavender, Minyak Kelapa',
@@ -152,7 +152,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-CNF-01',
+                'code_item' => 'GB-CNF-30',
                 'name_item' => 'Gentle Baby Cough n Flu 30ml',
                 'description_item' => 'Minyak bayi yang membantu meredakan batuk dan flu pada anak bayi',
                 'ingredient_item' => 'Minyak Eucalyptus, Minyak Lavender, Minyak Kelapa',
@@ -166,7 +166,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-CNF-02',
+                'code_item' => 'GB-CNF-100',
                 'name_item' => 'Gentle Baby Cough n Flu 100ml',
                 'description_item' => 'Minyak bayi yang membantu meredakan batuk dan flu pada anak bayi',
                 'ingredient_item' => 'Minyak Eucalyptus, Minyak Lavender, Minyak Kelapa',
@@ -180,7 +180,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-CNF-03',
+                'code_item' => 'GB-CNF-250',
                 'name_item' => 'Gentle Baby Cough n Flu 250ml',
                 'description_item' => 'Minyak bayi yang membantu meredakan batuk dan flu pada anak bayi',
                 'ingredient_item' => 'Minyak Eucalyptus, Minyak Lavender, Minyak Kelapa',
@@ -197,7 +197,7 @@ class MasterItemSeeder extends Seeder
             // Bye Bugs - 10ml, 30ml, 100ml, 250ml
             [
                 'company_id' => 3,
-                'code_item' => 'GB-BB',
+                'code_item' => 'GB-BB-10',
                 'name_item' => 'Gentle Baby Bye Bugs 10ml',
                 'description_item' => 'Minyak bayi yang mengusir nyamuk dan serangga dengan aman',
                 'ingredient_item' => 'Minyak Citronella, Minyak Lemongrass, Minyak Kelapa',
@@ -211,7 +211,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-BB-01',
+                'code_item' => 'GB-BB-30',
                 'name_item' => 'Gentle Baby Bye Bugs 30ml',
                 'description_item' => 'Minyak bayi untuk meningkatkan mood anak',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -225,7 +225,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-BB-02',
+                'code_item' => 'GB-BB-100',
                 'name_item' => 'Gentle Baby Bye Bugs 100ml',
                 'description_item' => 'Minyak bayi untuk meningkatkan mood anak',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -241,7 +241,7 @@ class MasterItemSeeder extends Seeder
             // Gimme Food - 10ml, 30ml, 100ml, 250ml
             [
                 'company_id' => 3,
-                'code_item' => 'GB-GF',
+                'code_item' => 'GB-GF-10',
                 'name_item' => 'Gentle Baby Gimme Food 10ml',
                 'description_item' => 'Minyak untuk meningkatkan nafsu makan pada bayi',
                 'ingredient_item' => 'Minyak Chamomile, Minyak Zinc Oxide, Minyak Kelapa',
@@ -255,7 +255,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-GF-01',
+                'code_item' => 'GB-GF-30',
                 'name_item' => 'Gentle Baby Gimme Food 30ml',
                 'description_item' => 'Minyak untuk meningkatkan nafsu makan pada bayi',
                 'ingredient_item' => 'Minyak Chamomile, Minyak Zinc Oxide, Minyak Kelapa',
@@ -269,7 +269,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-GF-02',
+                'code_item' => 'GB-GF-100',
                 'name_item' => 'Gentle Baby Gimme Food 100ml',
                 'description_item' => 'Minyak untuk meningkatkan nafsu makan pada bayi',
                 'ingredient_item' => 'Minyak Chamomile, Minyak Zinc Oxide, Minyak Kelapa',
@@ -283,7 +283,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-GF-03',
+                'code_item' => 'GB-GF-250',
                 'name_item' => 'Gentle Baby Gimme Food 250ml',
                 'description_item' => 'Minyak untuk meningkatkan nafsu makan pada bayi',
                 'ingredient_item' => 'Minyak Chamomile, Minyak Zinc Oxide, Minyak Kelapa',
@@ -300,7 +300,7 @@ class MasterItemSeeder extends Seeder
             // Tummy Calmer - 10ml, 30ml, 100ml, 250ml
             [
                 'company_id' => 3,
-                'code_item' => 'GB-TC',
+                'code_item' => 'GB-TC-10',
                 'name_item' => 'Gentle Baby Tummy Calmer 10ml',
                 'description_item' => 'Minyak bayi untuk perut kembung dan kolik',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -314,7 +314,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-TC-01',
+                'code_item' => 'GB-TC-30',
                 'name_item' => 'Gentle Baby Tummy Calmer 30ml',
                 'description_item' => 'Minyak bayi untuk perut kembung dan kolik',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -328,7 +328,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-TC-02',
+                'code_item' => 'GB-TC-100',
                 'name_item' => 'Gentle Baby Tummy Calmer 100ml',
                 'description_item' => 'Minyak bayi untuk perut kembung dan kolik',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -342,7 +342,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-TC-03',
+                'code_item' => 'GB-TC-250',
                 'name_item' => 'Gentle Baby Tummy Calmer 250ml',
                 'description_item' => 'Minyak bayi untuk perut kembung dan kolik',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -359,7 +359,7 @@ class MasterItemSeeder extends Seeder
             // LDR Booster - 10ml, 30ml, 100ml, 250ml
             [
                 'company_id' => 3,
-                'code_item' => 'GB-LDR',
+                'code_item' => 'GB-LDR-10',
                 'name_item' => 'Gentle Baby LDR Booster 10ml',
                 'description_item' => 'Minyak bayi untuk meningkatkan daya tahan tubuh',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -373,7 +373,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-LDR-01',
+                'code_item' => 'GB-LDR-30',
                 'name_item' => 'Gentle Baby LDR Booster 30ml',
                 'description_item' => 'Minyak bayi untuk meningkatkan daya tahan tubuh',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -387,7 +387,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-LDR-02',
+                'code_item' => 'GB-LDR-100',
                 'name_item' => 'Gentle Baby LDR Booster 100ml',
                 'description_item' => 'Minyak bayi untuk meningkatkan daya tahan tubuh',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -401,7 +401,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-LDR-03',
+                'code_item' => 'GB-LDR-250',
                 'name_item' => 'Gentle Baby LDR Booster 250ml',
                 'description_item' => 'Minyak bayi untuk meningkatkan daya tahan tubuh',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -418,7 +418,7 @@ class MasterItemSeeder extends Seeder
             // Massage Your Baby - 10ml, 30ml, 100ml, 250ml
             [
                 'company_id' => 3,
-                'code_item' => 'GB-MYB',
+                'code_item' => 'GB-MYB-10',
                 'name_item' => 'Gentle Baby Massage Your Baby 10ml',
                 'description_item' => 'Minyak bayi untuk pijat bayi',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -432,7 +432,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-MYB-01',
+                'code_item' => 'GB-MYB-30',
                 'name_item' => 'Gentle Baby Massage Your Baby 30ml',
                 'description_item' => 'Minyak bayi untuk pijat bayi',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -446,7 +446,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-MYB-02',
+                'code_item' => 'GB-MYB-100',
                 'name_item' => 'Gentle Baby Massage Your Baby 100ml',
                 'description_item' => 'Minyak bayi untuk pijat bayi',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -460,7 +460,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-MYB-03',
+                'code_item' => 'GB-MYB-250',
                 'name_item' => 'Gentle Baby Massage Your Baby 250ml',
                 'description_item' => 'Minyak bayi untuk pijat bayi',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -477,7 +477,7 @@ class MasterItemSeeder extends Seeder
             // Immboost - 10ml, 30ml, 100ml, 250ml
             [
                 'company_id' => 3,
-                'code_item' => 'GB-IMB',
+                'code_item' => 'GB-IMB-10',
                 'name_item' => 'Gentle Baby Immboost 10ml',
                 'description_item' => 'Minyak bayi untuk meningkatkan daya tahan tubuh anak',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -491,7 +491,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-IMB-01',
+                'code_item' => 'GB-IMB-30',
                 'name_item' => 'Gentle Baby Immboost 30ml',
                 'description_item' => 'Minyak bayi untuk meningkatkan daya tahan tubuh anak',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -505,7 +505,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-IMB-02',
+                'code_item' => 'GB-IMB-100',
                 'name_item' => 'Gentle Baby Immboost 100ml',
                 'description_item' => 'Minyak bayi untuk meningkatkan daya tahan tubuh anak',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',
@@ -519,7 +519,7 @@ class MasterItemSeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'code_item' => 'GB-IMB-03',
+                'code_item' => 'GB-IMB-250',
                 'name_item' => 'Gentle Baby Immboost 250ml',
                 'description_item' => 'Minyak bayi untuk meningkatkan daya tahan tubuh anak',
                 'ingredient_item' => 'Minyak Peppermint, Minyak Fennel, Minyak Kelapa',

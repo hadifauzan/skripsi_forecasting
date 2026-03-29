@@ -1,0 +1,160 @@
+🔧 QUICK START - Buffer Stock Database Update
+================================================
+
+⏱️  5 Menit Setup Guide
+
+STEP 1: Prepare Configuration (1 menit)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📁 Di folder: c:\laragon\www\skripsi_forecasting\python\
+
+1. Copy file .env.example menjadi .env
+   Command Windows:
+   > copy .env.example .env
+
+   OR gunakan File Explorer:
+   - Klik kanan .env.example
+   - Copy
+   - Paste
+   - Rename ke .env
+
+2. Edit file .env (gunakan Notepad atau VS Code)
+   Sesuaikan dengan database credentials Anda:
+   
+   DB_HOST=localhost          (atau server address jika remote)
+   DB_PORT=3306               (default MySQL)
+   DB_USERNAME=root           (sesuaikan username MySQL Anda)
+   DB_PASSWORD=               (sesuaikan password MySQL Anda)
+   DB_DATABASE=skripsi_forecasting
+
+
+STEP 2: Verify Dependencies (1 menit)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Pastikan requirements.txt sudah memiliki:
+- pymysql==1.1.0
+- python-dotenv==1.0.0
+- pandas
+- numpy
+- openpyxl
+
+Jika belum, jalankan:
+> pip install -r requirements.txt
+
+
+STEP 3: Run Update Script (3 menit)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Option A: Double-click dari File Explorer
+├─ run_update.bat (untuk Command Prompt)
+└─ run_update.ps1 (untuk PowerShell)
+
+Option B: Command Prompt
+> cd c:\laragon\www\skripsi_forecasting\python
+> python update_buffer_stock_db.py
+
+Option C: PowerShell
+> cd c:\laragon\www\skripsi_forecasting\python
+> python update_buffer_stock_db.py
+
+
+EXPECTED OUTPUT:
+================================================
+================================================================================
+BUFFER STOCK DATABASE UPDATE SCRIPT
+================================================================================
+
+✓ Buffer Stock Calculator initialized successfully
+✓ Connected to database: skripsi_forecasting
+✓ Loaded 45 items from database
+✓ Updated Product A: buffer_stock = 125
+✓ Updated Product B: buffer_stock = 89
+...
+✓ Changes committed to database
+✓ Database connection closed
+
+================================================================================
+UPDATE SUMMARY
+================================================================================
+Total items processed: 45
+Successfully updated: 43
+Items not found in database: 2
+Errors occurred: 0
+================================================================================
+
+✅ Buffer stock update BERHASIL!
+   Updated: 43 items
+   Not found: 2 items
+   Errors: 0 items
+
+
+TROUBLESHOOTING:
+================================================
+
+❌ Error: "Database connection error"
+→ Verify DB_HOST, DB_USERNAME, DB_PASSWORD di .env file
+→ Pastikan MySQL Server sudah berjalan
+→ Cek database 'skripsi_forecasting' sudah exist
+
+❌ Error: "Product not found in database"
+→ Normal - berarti ada produk di Excel yang tidak ada di database
+→ Bisa diabaikan, akan skip produk tersebut
+→ Lihat log untuk detail produk mana yang tidak ditemukan
+
+❌ Error: "No such file or directory"
+→ Pastikan Excel file ada: Dataset_Forecasting_ARIMA_Lengkap.xlsx
+→ Default path: folder yang sama dengan script
+→ Atau set EXCEL_PATH di file .env
+
+❌ Error: ".env file tidak ditemukan"
+→ Jalankan: copy .env.example .env
+→ Edit .env dengan database credentials
+
+
+AFTER UPDATE:
+================================================
+✅ Tabel master_items_stock sudah ter-update dengan buffer_stock values
+✅ Data siap digunakan untuk inventory planning
+✅ Nilai buffer_stock sudah reflect di admin panel
+
+Untuk verify update:
+1. Masuk ke Laravel admin panel
+2. Lihat halaman inventory/raw_materials
+3. Kolom "Buffer Stock" sekarang menampilkan nilai dari database
+4. Jika ada perubahan di Excel, jalankan script ini lagi untuk update
+
+
+ADVANCED USAGE:
+================================================
+
+Jalankan dengan custom Excel path:
+Buka Python interpreter dan jalankan:
+```python
+from update_buffer_stock_db import BufferStockDatabaseUpdater
+
+updater = BufferStockDatabaseUpdater(
+    excel_path='path/to/your/data.xlsx',
+    avg_lead_time=5.4,
+    max_lead_time=7
+)
+
+result = updater.update_buffer_stocks(inventory_id=1)
+print(result)
+```
+
+Untuk API integration atau cron job scheduling,
+lihat file: README_UPDATE_BUFFER_STOCK_DB.md
+
+
+FILE REFERENCES:
+================================================
+📄 update_buffer_stock_db.py    - Main script yang dijalankan
+📄 .env.example                 - Template konfigurasi
+📄 .env                         - Konfigurasi (dibuat dari .env.example)
+📄 run_update.bat               - Windows batch launcher
+📄 run_update.ps1               - PowerShell launcher
+📄 buffer_stock_calc.py         - Calculation module (digunakan oleh update script)
+📄 README_UPDATE_BUFFER_STOCK_DB.md - Dokumentasi lengkap
+
+
+QUESTIONS?
+================================================
+Lihat: README_UPDATE_BUFFER_STOCK_DB.md untuk documentation lengkap

@@ -92,10 +92,12 @@
                         </div>
                     </div>
 
+                    @if(!$hasInventoryAccess)
                     <a href="{{ route('shopping') }}" target="_blank"
                         class="text-sm xl:text-base text-gray-600 hover:text-blue-600 transition-colors duration-200">
                         Belanja
                     </a>
+                    @endif
                     
                     <a href="{{ route('articles') }}"
                         class="text-sm xl:text-base {{ Route::currentRouteName() == 'articles' ? 'text-blue-600 font-bold' : 'text-gray-600' }} hover:text-blue-600 transition-colors duration-200">
@@ -182,6 +184,18 @@
                                         </a>
                                         <div class="border-t border-gray-100"></div>
                                     @endif
+                                    @if($hasInventoryAccess)
+                                        <a href="{{ route('admin.inventory.dashboard') }}"
+                                            class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200">
+                                            <svg class="h-5 w-5 mr-2" fill="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path d="M20 13H4c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c0-1.1-.9-2-2-2zm0 6H4v-4h16v4zm0-10H4c-1.1 0-2 .9-2 2v4h2v-4h16v4h2v-4c0-1.1-.9-2-2-2zm0-7H4c-1.1 0-2 .9-2 2v4h2V4h16v4h2V4c0-1.1-.9-2-2-2z"></path>
+                                            </svg>
+                                            Dashboard Inventory
+                                        </a>
+                                        <div class="border-t border-gray-100"></div>
+                                    @endif
+                                    @if(!$hasInventoryAccess)
                                     <a target="_blank" href="{{ route('shopping') }}"
                                         class="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200">
                                         <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor"
@@ -201,6 +215,7 @@
                                         </svg>
                                         Riwayat Pesanan
                                     </a>
+                                    @endif
                                     <div class="border-t border-gray-100"></div>
                                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                                         @csrf
@@ -290,10 +305,12 @@
                         </div>
                     </div>
 
+                    @if(!$hasInventoryAccess)
                     <a href="{{ route('shopping') }}"
                         class="block px-3 py-2 text-base text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-all duration-200">
                         Belanja
                     </a>
+                    @endif
                     
                     <a href="{{ route('articles') }}"
                         class="block px-3 py-2 text-base {{ Route::currentRouteName() == 'articles' ? 'text-blue-600 font-bold bg-blue-50' : 'text-gray-600' }} hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-all duration-200">
@@ -364,6 +381,17 @@
                                     </path>
                                 </svg>
                                 Dashboard Admin
+                            </a>
+                        @endif
+
+                        @if($hasInventoryAccess)
+                            <a href="{{ route('admin.inventory.dashboard') }}"
+                                class="block px-3 py-2 mb-2 text-base text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-all duration-200 font-nunito">
+                                <svg class="inline h-6 w-6 mr-2" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path d="M20 13H4c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c0-1.1-.9-2-2-2zm0 6H4v-4h16v4zm0-10H4c-1.1 0-2 .9-2 2v4h2v-4h16v4h2v-4c0-1.1-.9-2-2-2zm0-7H4c-1.1 0-2 .9-2 2v4h2V4h16v4h2V4c0-1.1-.9-2-2-2z"></path>
+                                </svg>
+                                Dashboard Inventory
                             </a>
                         @endif
 
