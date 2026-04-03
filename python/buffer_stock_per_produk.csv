@@ -1,38 +1,38 @@
-﻿Produk,Max_Daily_Sales,Avg_Daily_Sales,Standar_Deviasi,Buffer_Stock_Unit,Safety_Stock_95percent_Unit,Avg_Lead_Time_Hari,Max_Lead_Time_Hari,Rumus
-GB-CNF-10,23.4,4.4,12.95,140.05,49.65,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-CNF-30,20.0,4.48,10.66,115.81,40.88,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-DS-10,4.0,0.8,2.46,23.68,9.42,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-JOY-10,3.0,0.43,1.5,18.68,5.75,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-DS-30,3.0,0.68,2.68,17.35,10.29,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-TC-10,2.8,0.46,1.68,17.1,6.45,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-IB-30,2.0,0.28,0.99,12.48,3.8,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-GF-30,2.0,0.3,1.47,12.37,5.63,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-TC-30,2.0,0.35,1.34,12.14,5.14,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-GF-10,2.0,0.41,1.9,11.81,7.28,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-IB-10,2.0,0.41,1.81,11.78,6.96,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-LDR-10,1.0,0.1,0.45,6.47,1.73,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-TP--NB,1.0,0.1,0.54,6.44,2.07,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-BB-10,1.0,0.13,0.66,6.32,2.54,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-JOY-30,1.0,0.21,0.82,5.86,3.13,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-TP-CC,1.0,0.34,1.67,5.17,6.39,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-MYB-10,0.08,0.08,0.5,0.13,1.9,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-EC45,0.06,0.06,0.45,0.1,1.72,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-BB-30,0.06,0.06,0.38,0.1,1.44,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-BR45,0.05,0.05,0.37,0.09,1.41,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-LDR-30,0.05,0.05,0.25,0.08,0.97,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-MYB-30,0.03,0.03,0.19,0.05,0.74,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-TP-TV,0.03,0.03,0.19,0.05,0.72,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-TEETH10,0.03,0.03,0.28,0.05,1.08,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-CNF-100,0.02,0.02,0.13,0.03,0.49,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-DS-100,0.01,0.01,0.12,0.02,0.45,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-AERIS10,0.01,0.01,0.12,0.01,0.45,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-DS-250,0.01,0.01,0.09,0.01,0.35,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-JOY-100,0.01,0.01,0.07,0.01,0.28,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-IB-100,0.01,0.01,0.07,0.01,0.28,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-BR75,0.0,0.0,0.05,0.0,0.2,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-CNF-250,0.0,0.0,0.05,0.0,0.2,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-EC75,0.0,0.0,0.05,0.0,0.2,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-GF-250,0.0,0.0,0.05,0.0,0.2,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-LDR-250,0.0,0.0,0.05,0.0,0.2,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-MYB-100,0.0,0.0,0.05,0.0,0.2,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
-GB-TC-250,0.0,0.0,0.05,0.0,0.2,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4)
+﻿Produk,Max_Daily_Sales,Avg_Daily_Sales,Standar_Deviasi,Buffer_Stock_Unit,Safety_Stock_95percent_Unit,ROP_Unit,Avg_Lead_Time_Hari,Max_Lead_Time_Hari,Rumus_Buffer_Stock,Rumus_ROP
+GB-CNF-10,23.4,4.4,12.95,140.05,49.65,73.39,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-CNF-30,20.0,4.48,10.66,115.81,40.88,65.07,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-DS-10,4.0,0.8,2.46,23.68,9.42,13.74,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-JOY-10,3.0,0.43,1.5,18.68,5.75,8.07,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-DS-30,3.0,0.68,2.68,17.35,10.29,13.94,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-TC-10,2.8,0.46,1.68,17.1,6.45,8.95,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-IB-30,2.0,0.28,0.99,12.48,3.8,5.33,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-GF-30,2.0,0.3,1.47,12.37,5.63,7.26,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-TC-30,2.0,0.35,1.34,12.14,5.14,7.01,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-GF-10,2.0,0.41,1.9,11.81,7.28,9.47,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-IB-10,2.0,0.41,1.81,11.78,6.96,9.18,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-LDR-10,1.0,0.1,0.45,6.47,1.73,2.27,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-TP-NB,1.0,0.1,0.54,6.44,2.07,2.63,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-BB-10,1.0,0.13,0.66,6.32,2.54,3.22,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-JOY-30,1.0,0.21,0.82,5.86,3.13,4.27,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-TP-CC,1.0,0.34,1.67,5.17,6.39,8.23,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-MYB-10,0.08,0.08,0.5,0.13,1.9,2.35,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+EC45,0.06,0.06,0.45,0.1,1.72,2.06,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-BB-30,0.06,0.06,0.38,0.1,1.44,1.78,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+BR45,0.05,0.05,0.37,0.09,1.41,1.7,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-LDR-30,0.05,0.05,0.25,0.08,0.97,1.23,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-MYB-30,0.03,0.03,0.19,0.05,0.74,0.92,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+TEETH10,0.03,0.03,0.28,0.05,1.08,1.24,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-TP-TV,0.03,0.03,0.19,0.05,0.72,0.88,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-CNF-100,0.02,0.02,0.13,0.03,0.49,0.58,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-DS-100,0.01,0.01,0.12,0.02,0.45,0.52,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+AERIS10,0.01,0.01,0.12,0.01,0.45,0.49,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-DS-250,0.01,0.01,0.09,0.01,0.35,0.39,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-JOY-100,0.01,0.01,0.07,0.01,0.28,0.31,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-IB-100,0.01,0.01,0.07,0.01,0.28,0.31,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+BR75,0.0,0.0,0.05,0.0,0.2,0.22,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-CNF-250,0.0,0.0,0.05,0.0,0.2,0.22,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+EC75,0.0,0.0,0.05,0.0,0.2,0.22,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-MYB-100,0.0,0.0,0.05,0.0,0.2,0.22,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-LDR-250,0.0,0.0,0.05,0.0,0.2,0.22,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-GF-250,0.0,0.0,0.05,0.0,0.2,0.22,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock
+GB-TC-250,0.0,0.0,0.05,0.0,0.2,0.22,5.4,7,(Max Daily Sales x 7) - (Avg Daily Sales x 5.4),(Avg Daily Sales x 5.4) + Safety Stock

@@ -6,9 +6,9 @@
     <meta name="description" content="Peluang usaha MPASI terbaik dengan modal 500ribu. Jadi agen NYAM sekarang dan raih penghasilan dari rumah!">
     <title>Agen NYAM - Peluang Usaha MPASI</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo1.png') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ asset('js/chart.js') }}"></script>
 </head>
 <body>
     <!-- Hero Section -->
@@ -322,7 +322,7 @@
         </div>
     </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/nyam-landing.js') }}"></script>
     <script>
         // Initialize chart with static data

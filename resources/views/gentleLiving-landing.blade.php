@@ -8,8 +8,15 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('storage/GentleLiving/logo-tab.png') }}">
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Local Fonts -->
+    <style>
+        @font-face {
+            font-family: 'Poppins';
+            src: url('{{ asset('assets/fonts/poppins/poppins-regular.woff2') }}') format('woff2');
+            font-weight: 400;
+            font-display: swap;
+        }
+    </style>
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/gentleLiving-landing.css') }}">
@@ -297,7 +304,7 @@
         </section>
 
     <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ asset('js/chart.js') }}"></script>
     
     <!-- Pass data to JavaScript -->
     <script>

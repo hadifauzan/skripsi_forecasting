@@ -289,7 +289,7 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
-                                        {{ $affiliate->created_at->format('d/m/Y') }}
+                                        {{ $affiliate->created_at ? $affiliate->created_at->format('d/m/Y') : '-' }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <div class="flex items-center justify-center space-x-2">
@@ -424,7 +424,7 @@
 
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('js/sweetalert2@11.js') }}"></script>
     <script>
         // Search and Filter functionality with automatic renumbering
         document.addEventListener('DOMContentLoaded', function() {

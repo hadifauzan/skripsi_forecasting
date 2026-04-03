@@ -6,9 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Gentle Living</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo-tab.png') }}">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="{{ asset('js/browser@4.js') }}"></script>
+    <!-- Local Fonts -->
+    <style>
+        @font-face {
+            font-family: 'Fredoka One';
+            src: url('{{ asset('assets/fonts/fredoka-v17-latin/fredoka-v17-latin-regular.woff2') }}') format('woff2');
+            font-weight: 400;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Nunito';
+            src: url('{{ asset('assets/fonts/nunito-v32-latin/nunito-v32-latin-regular.woff2') }}') format('woff2');
+            font-weight: 400;
+            font-display: swap;
+        }
+    </style>
 </head>
 
 <body>

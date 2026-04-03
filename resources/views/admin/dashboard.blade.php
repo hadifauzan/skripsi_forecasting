@@ -217,7 +217,7 @@
 </div>
 
 <!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script src="{{ asset('js/chart.min.js') }}"></script>
 
 <script>
     // Affiliates Status Pie Chart

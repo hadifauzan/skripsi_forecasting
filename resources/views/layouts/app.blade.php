@@ -45,11 +45,27 @@
                 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
     </style>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <!-- Local Fonts -->
+    <style>
+        @font-face {
+            font-family: 'Fredoka One';
+            src: url('{{ asset('assets/fonts/fredoka-v17-latin/fredoka-v17-latin-regular.woff2') }}') format('woff2');
+            font-weight: 400;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Nunito';
+            src: url('{{ asset('assets/fonts/nunito-v32-latin/nunito-v32-latin-regular.woff2') }}') format('woff2');
+            font-weight: 400;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Instrument Sans';
+            src: url('{{ asset('assets/fonts/instrument-sans-v4-latin/instrument-sans-v4-latin-regular.woff2') }}') format('woff2');
+            font-weight: 400;
+            font-display: swap;
+        }
+    </style>
 
     <script src="{{ asset('js/carousel.js') }}"></script>
     <script src="{{ asset('js/topbar.js') }}"></script>

@@ -49,9 +49,21 @@
     <!-- Admin Styles -->
     <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Local Fonts -->
+    <style>
+        @font-face {
+            font-family: 'Fredoka One';
+            src: url('{{ asset('assets/fonts/fredoka-v17-latin/fredoka-v17-latin-regular.woff2') }}') format('woff2');
+            font-weight: 400;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Nunito';
+            src: url('{{ asset('assets/fonts/nunito-v32-latin/nunito-v32-latin-regular.woff2') }}') format('woff2');
+            font-weight: 400;
+            font-display: swap;
+        }
+    </style>
 
     <!-- JavaScript -->
     <script src="{{ asset('js/carousel.js') }}"></script>
