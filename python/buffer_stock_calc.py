@@ -63,28 +63,32 @@ class BufferStockCalculator:
         
         for product in product_columns:
             try:
-                stats = {
-                    'product_name': product,
-                    'max_daily_sales': self.dataset[product].quantile(0.95),  # Persentil 95%
-                    'avg_daily_sales': self.dataset[product].mean(),
-                    'std_dev': self.dataset[product].std(),
-                    'min_daily_sales': self.dataset[product].min(),
-                    'max_daily_sales_actual': self.dataset[product].max(),
-                    'median_daily_sales': self.dataset[product].median()
-                }
+                # Gunakan persentil 95% sebagai max_daily_sales (tahan outlier)
+                max_daily_sales = self.dataset[product].quantile(0.95)
+                avg_daily_sales = self.dataset[product].mean()
                 
-                # Ensure max >= avg
-                stats['max_daily_sales'] = max(stats['max_daily_sales'], stats['avg_daily_sales'])
+                # Pastikan max >= avg
+                max_daily_sales = max(max_daily_sales, avg_daily_sales)
+                
+                # Calculate safety stock (metode standar deviasi, service level 95%)
+                z_score = 1.65
+                std_dev = self.dataset[product].std()
+                safety_stock = z_score * std_dev * np.sqrt(self.avg_lead_time)
                 
                 # Calculate buffer stock
-                stats['buffer_stock'] = max(0, 
-                    (stats['max_daily_sales'] * self.max_lead_time) - 
-                    (stats['avg_daily_sales'] * self.avg_lead_time)
+                buffer_stock = max(0, 
+                    (max_daily_sales * self.max_lead_time) - 
+                    (avg_daily_sales * self.avg_lead_time)
                 )
                 
-                # Calculate safety stock (alternative method)
-                z_score = 1.65  # 95% service level
-                stats['safety_stock'] = z_score * stats['std_dev'] * np.sqrt(self.avg_lead_time)
+                stats = {
+                    'Produk': product,
+                    'Pemakaian_Maksimum': max_daily_sales,
+                    'Pemakaian_Rata_rata': avg_daily_sales,
+                    'Standar_Deviasi': std_dev,
+                    'Buffer_Stock': buffer_stock,
+                    'Safety_Stock_95%': safety_stock
+                }
                 
                 product_stats.append(stats)
                 
@@ -121,11 +125,11 @@ class BufferStockCalculator:
         
         return {
             'total_products': len(self.product_stats),
-            'total_buffer_stock': self.product_stats['buffer_stock'].sum(),
-            'avg_buffer_stock': self.product_stats['buffer_stock'].mean(),
-            'total_safety_stock': self.product_stats['safety_stock'].sum(),
-            'max_buffer_stock': self.product_stats['buffer_stock'].max(),
-            'min_buffer_stock': self.product_stats['buffer_stock'].min(),
+            'total_buffer_stock': self.product_stats['Buffer_Stock'].sum(),
+            'avg_buffer_stock': self.product_stats['Buffer_Stock'].mean(),
+            'total_safety_stock': self.product_stats['Safety_Stock_95%'].sum(),
+            'max_buffer_stock': self.product_stats['Buffer_Stock'].max(),
+            'min_buffer_stock': self.product_stats['Buffer_Stock'].min(),
             'avg_lead_time': self.avg_lead_time,
             'max_lead_time': self.max_lead_time,
             'calculation_formula': '(Max Daily Sales × Max Lead Time) – (Avg Daily Sales × Avg Lead Time)'
@@ -136,25 +140,42 @@ class BufferStockCalculator:
         if self.product_stats is None:
             return []
         
-        top = self.product_stats.nlargest(n, 'buffer_stock')
+        top = self.product_stats.nlargest(n, 'Buffer_Stock')
         return top.to_dict('records')
     
     def export_to_csv(self, output_path: str):
-        """Export hasil calculation ke CSV"""
+        """Export hasil calculation ke CSV sesuai format notebook"""
         if self.product_stats is None:
             raise Exception("No data to export")
         
         export_df = self.product_stats.copy()
+        # Rename columns to match notebook format
+        export_df = export_df[['Produk', 'Pemakaian_Maksimum', 'Pemakaian_Rata_rata', 
+                               'Standar_Deviasi', 'Buffer_Stock', 'Safety_Stock_95%']]
         export_df.columns = [
-            'Product Name',
-            'Max Daily Sales',
-            'Avg Daily Sales',
-            'Std Dev',
-            'Min Daily Sales',
-            'Max Daily Sales (Actual)',
-            'Median Daily Sales',
-            'Buffer Stock',
-            'Safety Stock'
+            'Produk',
+            'Max_Daily_Sales',
+            'Avg_Daily_Sales',
+            'Standar_Deviasi',
+            'Buffer_Stock_Unit',
+            'Safety_Stock_95percent_Unit'
         ]
         
-        export_df.to_csv(output_path, index=False)
+        # Tambahkan informasi lead time
+        export_df['Avg_Lead_Time_Hari'] = self.avg_lead_time
+        export_df['Max_Lead_Time_Hari'] = self.max_lead_time
+        
+        # Tambahkan kolom keterangan rumus
+        export_df['Rumus'] = f'(Max Daily Sales x {self.max_lead_time}) - (Avg Daily Sales x {self.avg_lead_time})'
+        
+        # Urutkan berdasarkan buffer stock tertinggi
+        export_df = export_df.sort_values('Buffer_Stock_Unit', ascending=False)
+        
+        # Round semua angka ke 2 desimal
+        numeric_columns = export_df.select_dtypes(include=[np.number]).columns
+        export_df[numeric_columns] = export_df[numeric_columns].round(2)
+        
+        # Save to CSV
+        export_df.to_csv(output_path, index=False, encoding='utf-8-sig')
+        print(f"✅ Hasil analisis buffer stock per produk berhasil disimpan ke: {output_path}")
+        print(f"📊 Total: {len(export_df)} produk")

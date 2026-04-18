@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             MasterCustomerTypeSeeder::class,
             MasterCustomersSeeder::class,      // Then customers
             MasterItemSeeder::class,
+            MasterItemsRawMaterialCsvSeeder::class,
             RoleSeeder::class,
             AdminRolesSeeder::class,           // New: Add admin roles after basic roles
             UserSeeder::class,
@@ -32,6 +33,8 @@ class DatabaseSeeder extends Seeder
             OrderSeeder::class,
             PaymentSeeder::class,
             TransactionSalesSeeder::class,
+            ArimaForecastSeeder::class,
+            BufferStockSeeder::class,          // Import buffer stock calculations
             PartnerContentSeeder::class,
             ResellerContentSeeder::class,
             ReviewSeeder::class,

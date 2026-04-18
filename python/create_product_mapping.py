@@ -19,7 +19,7 @@ DB_PASSWORD = os.getenv('DB_PASSWORD', '')
 DB_NAME = os.getenv('DB_DATABASE', 'skripsi_forecasting')
 DB_PORT = int(os.getenv('DB_PORT', 3306))
 
-EXCEL_PATH = os.getenv('EXCEL_PATH', 'Dataset_Forecasting_ARIMA_Lengkap.xlsx')
+EXCEL_PATH = os.getenv('EXCEL_PATH', 'Dataset_Forecasting_ARIMA_Lengkap1.xlsx')
 MAPPING_FILE = 'product_mapping.json'
 
 print("=" * 100)

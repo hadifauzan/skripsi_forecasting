@@ -8,8 +8,8 @@
     <title>@yield('title', 'Admin - Gentle Living')</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo-tab.png') }}">
 
-    <!-- Vite CSS & JS (includes Tailwind) -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Local Tailwind build -->
+    @vite('resources/css/app.css')
     <style type="text/tailwindcss">
         @theme {
             --color-brand-50: #f0f9f9;

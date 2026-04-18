@@ -1,127 +1,132 @@
 @extends('layouts.admin_inventory.app')
 
-@section('title', 'Data Bahan Baku')
+@section('title', 'Data Produk Jadi')
 
 @include('components.buffer_stock_info')
 
 @section('content')
-<div class="min-h-screen bg-gray-100 pb-10">
-    <section class="bg-[#d3ebf4] border-b border-[#b9dbe8]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <h1 class="text-3xl font-semibold text-slate-800">Data Bahan Baku</h1>
-            <p class="text-slate-700 mt-2 text-lg">Home / Bahan Baku</p>
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">Data Produk jadi </h1>
+            <p class="text-lg text-gray-600">Daftar produk jadi dan monitoring buffer stock untuk manajemen inventori yang optimal</p>
         </div>
-    </section>
 
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-5">
-            <p class="text-lg text-slate-800 font-medium mb-3">Keterangan :</p>
-            <div class="flex flex-col gap-4 text-slate-800">
-                <div class="flex items-start gap-3">
-                    <span class="w-12 h-6 bg-red-500 rounded-sm flex-shrink-0 mt-1"></span>
-                    <div class="flex-1">
-                        <span class="text-lg leading-7">⚠ Stok kurang dari buffer (perlu order)</span>
-                        <div class="text-sm text-slate-500 mt-1">Menunjukkan berapa banyak stok yang kurang</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600">Total Data</p>
+                        <p class="text-3xl font-bold text-gray-900">{{ $summary['total'] }}</p>
                     </div>
-                </div>
-                <div class="flex items-start gap-3">
-                    <span class="w-12 h-6 bg-emerald-500 rounded-sm flex-shrink-0 mt-1"></span>
-                    <div class="flex-1">
-                        <span class="text-lg leading-7">✓ Stok mencukupi (surplus)</span>
-                        <div class="text-sm text-slate-500 mt-1">Menunjukkan berapa banyak stok yang surplus dari buffer</div>
-                    </div>
+                    <div class="text-4xl text-blue-500">📦</div>
                 </div>
             </div>
-            <div class="mt-4 text-sm text-slate-600">
-                <span>Total: {{ $summary['total'] }}</span>
-                <span class="mx-2">|</span>
-                <span>Harus order: {{ $summary['needs_order'] }}</span>
-                <span class="mx-2">|</span>
-                <span>Mencukupi: {{ $summary['sufficient'] }}</span>
+
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600">Harus Order</p>
+                        <p class="text-3xl font-bold text-red-600">{{ $summary['needs_order'] }}</p>
+                    </div>
+                    <div class="text-4xl text-red-500">⚠️</div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600">Mencukupi</p>
+                        <p class="text-3xl font-bold text-green-600">{{ $summary['sufficient'] }}</p>
+                    </div>
+                    <div class="text-4xl text-green-500">✅</div>
+                </div>
             </div>
         </div>
-    </section>
 
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-5">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-                <h2 class="text-2xl font-semibold text-slate-800">Data Bahan Baku</h2>
-
-                <div class="flex items-center gap-3 w-full sm:w-auto">
-                    <button type="button" onclick="openCreateModal()"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded text-lg transition-colors duration-200">
-                        Tambah
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <form method="GET" action="{{ route('admin.inventory.finished-goods') }}" class="flex-1 flex gap-2">
+                    <select
+                        name="per_page"
+                        class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        @foreach([10, 15, 25, 50, 100] as $option)
+                            <option value="{{ $option }}" {{ (int) $perPage === $option ? 'selected' : '' }}>
+                                {{ $option }}/hal
+                            </option>
+                        @endforeach
+                    </select>
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ $search }}"
+                        placeholder="Cari produk jadi..."
+                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        Cari
                     </button>
+                </form>
 
-                    <form method="GET" action="{{ route('admin.inventory.raw-materials') }}" class="w-full sm:w-80 flex items-center gap-2">
-                        <select
-                            name="per_page"
-                            class="border border-gray-300 rounded px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-200"
-                        >
-                            @foreach([10, 15, 25, 50, 100] as $option)
-                                <option value="{{ $option }}" {{ (int) $perPage === $option ? 'selected' : '' }}>
-                                    {{ $option }}/hal
-                                </option>
-                            @endforeach
-                        </select>
-                        <input
-                            type="text"
-                            name="search"
-                            value="{{ $search }}"
-                            placeholder="Search......."
-                            class="w-full border border-gray-300 rounded px-3 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-sky-200"
-                        >
-                    </form>
-                </div>
+                <button type="button" onclick="openCreateModal()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center gap-2 text-sm">
+                    <span>➕</span>
+                    <span>Tambah</span>
+                </button>
             </div>
+        </div>
 
+        <div class="bg-white rounded-lg shadow overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="min-w-full text-left">
-                    <thead>
-                        <tr class="border-b border-gray-300 text-2xl text-slate-700">
-                            <th class="py-3 pr-5 font-medium">No.</th>
-                            <th class="py-3 pr-5 font-medium">Nama Satuan</th>
-                            <th class="py-3 pr-5 font-medium">Kategori</th>
-                            <th class="py-3 pr-5 font-medium">Stock</th>
-                            <th class="py-3 pr-5 font-medium">BufferStock</th>
-                            <th class="py-3 pr-5 font-medium">Stock difference</th>
-                            <th class="py-3 font-medium text-center">Action</th>
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-sm font-semibold">No.</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold">Nama Satuan</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold">Kategori</th>
+                            <th class="px-6 py-4 text-right text-sm font-semibold">Stock</th>
+                            <th class="px-6 py-4 text-right text-sm font-semibold">Buffer Stock</th>
+                            <th class="px-6 py-4 text-right text-sm font-semibold">Stock difference</th>
+                            <th class="px-6 py-4 text-center text-sm font-semibold">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y divide-gray-200">
                         @forelse($rawMaterials as $row)
-                            <tr class="border-b border-gray-100 text-2xl text-slate-800">
-                                <td class="py-4 pr-5 align-top">{{ $rawMaterials->firstItem() + $loop->index }}.</td>
-                                <td class="py-4 pr-5 align-top">
-                                    <div>{{ $row['name_item'] }}</div>
+                            <tr class="hover:bg-blue-50 transition-colors">
+                                <td class="px-6 py-4 align-top text-sm text-gray-700">{{ $rawMaterials->firstItem() + $loop->index }}.</td>
+                                <td class="px-6 py-4 align-top">
+                                    <div class="font-semibold text-gray-900">{{ $row['name_item'] }}</div>
                                     @if(!empty($row['code_item']))
-                                        <div class="text-sm text-slate-500 mt-1">Kode: {{ $row['code_item'] }}</div>
+                                        <div class="text-sm text-gray-500 mt-1">Kode: {{ $row['code_item'] }}</div>
                                     @endif
-                                    <div class="text-xs text-slate-500 mt-1">Inventori: {{ $row['inventory'] }}</div>
+                                    <div class="text-xs text-gray-500 mt-1">Inventori: {{ $row['inventory'] }}</div>
                                 </td>
-                                <td class="py-4 pr-5 align-top">{{ $row['category'] }}</td>
-                                <td class="py-4 pr-5 align-top">{{ number_format($row['stock']) }}</td>
-                                <td class="py-4 pr-5 align-top buffer-stock-cell" data-product-name="{{ $row['name_item'] }}">{{ number_format($row['buffer_stock']) }}</td>
-                                <td class="py-4 pr-5 align-top">
-                                    <span class="inline-block min-w-14 text-center px-3 py-1 text-white text-xl rounded-sm {{ $row['needs_order'] ? 'bg-red-500' : 'bg-emerald-500' }}">
+                                <td class="px-6 py-4 align-top text-sm text-gray-700">{{ $row['category'] }}</td>
+                                <td class="px-6 py-4 align-top text-right text-sm font-semibold text-gray-900">{{ number_format($row['stock']) }}</td>
+                                <td class="px-6 py-4 align-top text-right text-sm text-gray-700 buffer-stock-cell" data-product-name="{{ $row['name_item'] }}">{{ number_format($row['buffer_stock']) }}</td>
+                                <td class="px-6 py-4 align-top text-right">
+                                    <span class="px-3 py-1 rounded-full text-sm font-medium text-white {{ $row['needs_order'] ? 'bg-red-600 text-red-800' : 'bg-green-600 text-green-800' }}">
                                         {{ $row['needs_order'] ? '⚠ ' . abs($row['stock_difference']) : '✓ ' . $row['stock_difference'] }}
                                     </span>
                                 </td>
-                                <td class="py-4 align-top">
+                                <td class="px-6 py-4 align-top text-center">
                                     <div class="flex items-center justify-center gap-3">
-                                        <button type="button" onclick="openDetailModal({{ $row['item_stock_id'] }})" class="text-slate-900 hover:text-slate-700" title="Lihat data bahan baku">
-                                            <x-heroicon-s-eye class="w-8 h-8" />
+                                        <button type="button" onclick="openDetailModal({{ $row['item_stock_id'] }})" class="text-blue-600 hover:text-blue-900 text-sm font-medium" title="Lihat data produk jadi">
+                                            Detail
                                         </button>
-                                        <button type="button" onclick="openEditModal({{ $row['item_stock_id'] }})" class="text-slate-900 hover:text-slate-700" title="Edit data bahan baku">
-                                            <x-heroicon-s-pencil-square class="w-8 h-8" />
+                                        <button type="button" onclick="openEditModal({{ $row['item_stock_id'] }})" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium" title="Edit data produk jadi">
+                                            Edit
+                                        </button>
+                                        <button type="button" onclick="deleteFinishedGoods({{ $row['item_stock_id'] }}, @js($row['name_item']))" class="text-rose-600 hover:text-rose-900 text-sm font-medium" title="Hapus data produk jadi">
+                                            Hapus
                                         </button>
                                     </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="py-8 text-center text-lg text-slate-500">
-                                    Data bahan baku tidak ditemukan.
+                                <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                                    Data produk jadi tidak ditemukan.
                                 </td>
                             </tr>
                         @endforelse
@@ -129,17 +134,33 @@
                 </table>
             </div>
 
-            <div class="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm text-slate-600">
-                <p>
-                    Menampilkan {{ $rawMaterials->firstItem() ?? 0 }} - {{ $rawMaterials->lastItem() ?? 0 }}
-                    dari {{ $rawMaterials->total() }} data
-                </p>
+            <div class="bg-white px-6 py-4 border-t border-gray-200">
+                {{ $rawMaterials->links() }}
+            </div>
+        </div>
+
+        <div class="mt-8 bg-blue-50 rounded-lg p-6 border border-blue-200">
+            <h3 class="text-lg font-semibold text-blue-900 mb-4">📚 Penjelasan Buffer Stock</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                 <div>
-                    {{ $rawMaterials->links() }}
+                    <h4 class="font-semibold text-blue-800 mb-2">🔍 Keterangan:</h4>
+                    <ul class="space-y-2 text-blue-700">
+                        <li><strong>Buffer Stock:</strong> Stok pengaman untuk mengantisipasi kebutuhan</li>
+                        <li><strong>Stock Difference:</strong> Selisih stok terhadap buffer stock</li>
+                        <li><strong>Harus Order:</strong> Stok di bawah buffer stock</li>
+                        <li><strong>Mencukupi:</strong> Stok masih aman</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-blue-800 mb-2">📊 Interpretasi Status:</h4>
+                    <ul class="space-y-2 text-blue-700">
+                        <li>⚠ <strong>Harus order:</strong> Stok perlu ditambah segera</li>
+                        <li>✅ <strong>Mencukupi:</strong> Stok masih aman untuk operasional</li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 </div>
 
 <!-- Detail Modal -->
@@ -147,7 +168,7 @@
     <div class="bg-white rounded-lg max-w-md w-full max-h-screen overflow-y-auto">
         <div class="bg-[#d3ebf4] border-b border-[#b9dbe8] px-6 py-4 sticky top-0">
             <div class="flex items-center justify-between">
-                <h2 class="text-xl font-semibold text-slate-800">Detail Bahan Baku</h2>
+                <h2 class="text-xl font-semibold text-slate-800">Detail Produk Jadi</h2>
                 <button type="button" onclick="closeDetailModal()" class="text-slate-500 hover:text-slate-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -179,7 +200,7 @@
     <div class="bg-white rounded-lg max-w-md w-full max-h-screen overflow-y-auto">
         <div class="bg-[#d3ebf4] border-b border-[#b9dbe8] px-6 py-4 sticky top-0">
             <div class="flex items-center justify-between">
-                <h2 class="text-xl font-semibold text-slate-800">Edit Stok Bahan Baku</h2>
+                <h2 class="text-xl font-semibold text-slate-800">Edit Stok Produk Jadi</h2>
                 <button type="button" onclick="closeEditModal()" class="text-slate-500 hover:text-slate-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -233,7 +254,7 @@
     <div class="bg-white rounded-lg max-w-md w-full max-h-screen overflow-y-auto">
         <div class="bg-[#d3ebf4] border-b border-[#b9dbe8] px-6 py-4 sticky top-0">
             <div class="flex items-center justify-between">
-                <h2 class="text-xl font-semibold text-slate-800">Tambah Bahan Baku</h2>
+                <h2 class="text-xl font-semibold text-slate-800">Tambah Produk Jadi</h2>
                 <button type="button" onclick="closeCreateModal()" class="text-slate-500 hover:text-slate-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -318,81 +339,46 @@
 
 <script>
 let currentItemStockId = null;
+const deleteFinishedGoodsUrlTemplate = '{{ route("admin.inventory.finished-goods.destroy", ["itemStock" => "__ID__"]) }}';
 
-// Fetch dan update buffer stock tabel dari API
-async function initializeBufferStockData() {
-    try {
-        console.log('===== Initializing Buffer Stock Data =====');
-        
-        // Tunggu cache dari fetchBufferStresFromAPI
-        let cache = await fetchBufferStresFromAPI();
-        
-        console.log('Total cache items:', Object.keys(cache).length);
-        console.log('Cache keys:', Object.keys(cache));
-        
-        // Jika cache kosong, coba tunggu sebentar dan fetch lagi
-        if (Object.keys(cache).length === 0) {
-            console.warn('Cache is empty, retrying...');
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            cache = await fetchBufferStresFromAPI();
-        }
-        
-        updateTableWithBufferStock(cache);
-    } catch (error) {
-        console.error('Error initializing buffer stock data:', error);
-    }
+function getDeleteFinishedGoodsUrl(itemStockId) {
+    return deleteFinishedGoodsUrlTemplate.replace('__ID__', encodeURIComponent(itemStockId));
 }
 
-function updateTableWithBufferStock(cache) {
-    // Get all buffer stock cells
-    const cells = document.querySelectorAll('.buffer-stock-cell');
-    console.log('Found buffer stock cells:', cells.length);
-    
-    if (cells.length === 0) {
-        console.warn('No buffer stock cells found in table');
+async function deleteFinishedGoods(itemStockId, itemName) {
+    if (!itemStockId) {
+        alert('ID produk jadi tidak valid.');
         return;
     }
-    
-    let updated = 0;
-    let notFound = 0;
-    
-    cells.forEach((cell, index) => {
-        const productName = cell.getAttribute('data-product-name');
-        console.log(`\nCell ${index}:`);
-        console.log(`  Product name: "${productName}"`);
-        console.log(`  Product name: "${productName}"`);
-        
-        if (!productName) {
-            console.warn('  ✗ No product name attribute');
+
+    const confirmDelete = confirm(`Hapus data produk jadi "${itemName}"? Tindakan ini tidak dapat dibatalkan.`);
+    if (!confirmDelete) {
+        return;
+    }
+
+    try {
+        const response = await fetch(getDeleteFinishedGoodsUrl(itemStockId), {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ||
+                    document.querySelector('input[name="_token"]')?.value
+            }
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+            alert(`✅ ${data.message}`);
+            location.reload();
             return;
         }
-        
-        if (cache[productName]) {
-            const bufferStock = cache[productName];
-            const value = typeof bufferStock === 'number' ? bufferStock : bufferStock.buffer_stock;
-            console.log(`  ✓ Found in cache, buffer stock: ${value}`);
-            cell.textContent = Number(value).toLocaleString('id-ID');
-            updated++;
-        } else {
-            console.log(`  ✗ Not found in cache`);
-            console.log(`  Available products sample:`, Object.keys(cache).slice(0, 5));
-            notFound++;
-        }
-    });
-    
-    console.log(`\n===== Update Summary =====`);
-    console.log(`Updated: ${updated}/${cells.length}`);
-    console.log(`Not found: ${notFound}/${cells.length}`);
-}
 
-// Initialize saat page load dengan delay
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(initializeBufferStockData, 500);
-    });
-} else {
-    // Page sudah selesai loading
-    setTimeout(initializeBufferStockData, 500);
+        alert(`❌ ${data.message || 'Gagal menghapus data produk jadi.'}`);
+    } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Terjadi kesalahan saat menghapus data.');
+    }
 }
 
 async function openDetailModal(itemStockId) {
@@ -404,7 +390,7 @@ async function openDetailModal(itemStockId) {
     content.innerHTML = '<div class="flex justify-center"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div></div>';
 
     try {
-        const response = await fetch(`/admin/inventory/raw-materials/${itemStockId}`);
+        const response = await fetch(`/admin/inventory/finished-goods/${itemStockId}`);
         const data = await response.json();
 
         content.innerHTML = `
@@ -442,43 +428,6 @@ async function openDetailModal(itemStockId) {
             </div>
         `;
 
-        // Get buffer stock dari cache yang sudah di-load
-        const productName = data.name_item;
-        try {
-            const cache = await fetchBufferStresFromAPI();
-            const apiBufferStock = cache[productName];
-
-            if (apiBufferStock) {
-                const apiContent = document.createElement('div');
-                apiContent.className = 'mt-6 pt-4 border-t border-gray-200';
-                
-                const bufferValue = typeof apiBufferStock === 'number' ? apiBufferStock : apiBufferStock.buffer_stock;
-                const avgDailySales = apiBufferStock.avg_daily_sales || '-';
-                const maxDailySales = apiBufferStock.max_daily_sales || '-';
-                const safetyStock = apiBufferStock.safety_stock || '-';
-                
-                apiContent.innerHTML = `
-                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
-                        <div class="flex items-start justify-between mb-2">
-                            <p class="text-sm font-bold text-blue-900">📊 Forecasting Analysis</p>
-                            <button type="button" onclick="showBufferStockInfoModal()" class="text-xs text-blue-600 hover:text-blue-800 underline">
-                                Learn More
-                            </button>
-                        </div>
-                        <div class="text-sm text-blue-800 space-y-1.5">
-                            <p><strong>Calculated Buffer:</strong> <span class="font-mono font-bold">${Number(bufferValue).toLocaleString('id-ID')}</span> unit</p>
-                            ${avgDailySales !== '-' ? `<p><strong>Avg Daily Sales:</strong> <span class="font-mono">${typeof avgDailySales === 'number' ? avgDailySales.toFixed(2) : avgDailySales}</span> unit/day</p>` : ''}
-                            ${maxDailySales !== '-' ? `<p><strong>Max Daily Sales:</strong> <span class="font-mono">${typeof maxDailySales === 'number' ? maxDailySales.toFixed(2) : maxDailySales}</span> unit/day</p>` : ''}
-                            ${safetyStock !== '-' ? `<p><strong>Safety Stock:</strong> <span class="font-mono">${Number(safetyStock).toLocaleString('id-ID')}</span> unit</p>` : ''}
-                        </div>
-                    </div>
-                `;
-                content.appendChild(apiContent);
-            }
-        } catch (error) {
-            console.error('Error fetching buffer stock:', error);
-        }
-
         document.getElementById('editFromDetailBtn').onclick = function() {
             closeDetailModal();
             openEditModal(itemStockId);
@@ -502,7 +451,7 @@ async function openEditModal(itemStockId) {
     document.getElementById('editError').classList.add('hidden');
 
     try {
-        const response = await fetch(`/admin/inventory/raw-materials/${itemStockId}`);
+        const response = await fetch(`/admin/inventory/finished-goods/${itemStockId}`);
         const data = await response.json();
 
         document.getElementById('editItemName').textContent = data.name_item || '-';
@@ -510,7 +459,7 @@ async function openEditModal(itemStockId) {
         document.getElementById('editBufferStock').textContent = parseInt(data.buffer_stock).toLocaleString('id-ID');
         document.getElementById('editStock').value = data.stock;
 
-        form.action = `/admin/inventory/raw-materials/${itemStockId}`;
+        form.action = `/admin/inventory/finished-goods/${itemStockId}`;
     } catch (error) {
         console.error('Error:', error);
         document.getElementById('editError').textContent = 'Gagal memuat data';
@@ -586,7 +535,7 @@ async function openCreateModal() {
 
     // Load items and inventories
     try {
-        const response = await fetch('/admin/inventory/raw-materials/create/form-data');
+        const response = await fetch('/admin/inventory/finished-goods/create/form-data');
         const data = await response.json();
 
         // Populate items
@@ -640,7 +589,7 @@ document.getElementById('createForm').addEventListener('submit', async function(
     submitBtn.disabled = true;
 
     try {
-        const response = await fetch('/admin/inventory/raw-materials', {
+        const response = await fetch('/admin/inventory/finished-goods', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

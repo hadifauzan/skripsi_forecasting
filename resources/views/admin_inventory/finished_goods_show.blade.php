@@ -1,13 +1,13 @@
 @extends('layouts.admin_inventory.app')
 
-@section('title', 'Detail Bahan Baku')
+@section('title', 'Detail Produk Jadi')
 
 @section('content')
 <div class="min-h-screen bg-gray-100 pb-10">
     <section class="bg-[#d3ebf4] border-b border-[#b9dbe8]">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <h1 class="text-3xl font-semibold text-slate-800">Detail Bahan Baku</h1>
-            <p class="text-slate-700 mt-2 text-lg">Home / Bahan Baku / Detail</p>
+            <h1 class="text-3xl font-semibold text-slate-800">Detail Produk Jadi</h1>
+            <p class="text-slate-700 mt-2 text-lg">Home / Produk Jadi / Detail</p>
         </div>
     </section>
 
@@ -47,10 +47,10 @@
             </div>
 
             <div class="mt-6 flex items-center gap-3">
-                <a href="{{ route('admin.inventory.raw-materials') }}" class="px-4 py-2 rounded border border-gray-300 text-slate-700 hover:bg-gray-50">
+                <a href="{{ route('admin.inventory.finished-goods') }}" class="px-4 py-2 rounded border border-gray-300 text-slate-700 hover:bg-gray-50">
                     Kembali
                 </a>
-                <a href="{{ route('admin.inventory.raw-materials.edit', $itemStock->item_stock_id) }}" class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">
+                <a href="{{ route('admin.inventory.finished-goods.edit', $itemStock->item_stock_id) }}" class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">
                     Edit Stok
                 </a>
             </div>

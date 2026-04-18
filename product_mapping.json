@@ -1,0 +1,6 @@
+{
+  "generated_from": "product_mapping_generator.py",
+  "excel_file": "Dataset_Forecasting_ARIMA_Lengkap1.xlsx",
+  "instructions": "Update the \"mapped_to\" value untuk setiap produk dengan nama_item yang benar dari database",
+  "products": {}
+}

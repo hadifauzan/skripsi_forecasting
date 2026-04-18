@@ -1,13 +1,13 @@
 @extends('layouts.admin_inventory.app')
 
-@section('title', 'Edit Stok Bahan Baku')
+@section('title', 'Edit Stok Produk Jadi')
 
 @section('content')
 <div class="min-h-screen bg-gray-100 pb-10">
     <section class="bg-[#d3ebf4] border-b border-[#b9dbe8]">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <h1 class="text-3xl font-semibold text-slate-800">Edit Stok Bahan Baku</h1>
-            <p class="text-slate-700 mt-2 text-lg">Home / Bahan Baku / Edit</p>
+            <h1 class="text-3xl font-semibold text-slate-800">Edit Stok Produk Jadi</h1>
+            <p class="text-slate-700 mt-2 text-lg">Home / Produk Jadi / Edit</p>
         </div>
     </section>
 
@@ -20,7 +20,7 @@
                 <p class="text-sm text-slate-500">Buffer Stock: {{ number_format($bufferStock) }}</p>
             </div>
 
-            <form method="POST" action="{{ route('admin.inventory.raw-materials.update', $itemStock->item_stock_id) }}" class="space-y-4">
+            <form method="POST" action="{{ route('admin.inventory.finished-goods.update', $itemStock->item_stock_id) }}" class="space-y-4">
                 @csrf
                 @method('PUT')
 
@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('admin.inventory.raw-materials.show', $itemStock->item_stock_id) }}" class="px-4 py-2 rounded border border-gray-300 text-slate-700 hover:bg-gray-50">
+                    <a href="{{ route('admin.inventory.finished-goods.show', $itemStock->item_stock_id) }}" class="px-4 py-2 rounded border border-gray-300 text-slate-700 hover:bg-gray-50">
                         Batal
                     </a>
                     <button type="submit" class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">

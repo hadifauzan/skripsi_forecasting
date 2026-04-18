@@ -253,7 +253,8 @@ class LandingController extends Controller
         if (!$bannerProduct) {
             $bannerProduct = (object) [
                 'title' => 'Gentle Baby',
-                'image' => 'default-product.jpg'
+                'image' => 'default-product.jpg',
+                'body' => null,
             ];
         }
 

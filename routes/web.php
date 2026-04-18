@@ -541,9 +541,32 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     // Inventory Dashboard - Owner, Admin Inventory, Production Team
     Route::middleware(['role:owner,admin_inventory,production_team'])->group(function () {
         Route::get('/inventory-dashboard', [InventoryDashboardController::class, 'index'])->name('admin.inventory.dashboard');
-        Route::get('/inventory/raw-materials', [InventoryDashboardController::class, 'rawMaterials'])->name('admin.inventory.raw-materials');
-        Route::get('/inventory/raw-materials/{itemStock}', [InventoryDashboardController::class, 'getRawMaterialDetail']);
-        Route::put('/inventory/raw-materials/{itemStock}', [InventoryDashboardController::class, 'updateRawMaterial'])->name('admin.inventory.raw-materials.update');
+        Route::get('/inventory/finished-goods', [InventoryDashboardController::class, 'rawMaterials'])->name('admin.inventory.finished-goods');
+        Route::get('/inventory/finished-goods/{itemStock}/show', [InventoryDashboardController::class, 'finishedGoodsShow'])->name('admin.inventory.finished-goods.show');
+        Route::get('/inventory/finished-goods/{itemStock}/edit', [InventoryDashboardController::class, 'finishedGoodsEdit'])->name('admin.inventory.finished-goods.edit');
+        Route::get('/inventory/finished-goods/{itemStock}', [InventoryDashboardController::class, 'getRawMaterialDetail']);
+        Route::put('/inventory/finished-goods/{itemStock}', [InventoryDashboardController::class, 'updateRawMaterial'])->name('admin.inventory.finished-goods.update');
+        Route::delete('/inventory/finished-goods/{itemStock}', [InventoryDashboardController::class, 'destroyFinishedGoods'])->name('admin.inventory.finished-goods.destroy');
+
+        // Buffer Stock Routes
+        Route::get('/inventory/buffer-stock/raw-materials', [InventoryDashboardController::class, 'bufferStockRawMaterials'])->name('admin.inventory.buffer-stock.raw-materials');
+        Route::get('/inventory/buffer-stock/details/{itemRawId}', [InventoryDashboardController::class, 'bufferStockDetail'])->name('admin.inventory.buffer-stock.detail');
+        Route::put('/inventory/buffer-stock/raw-materials/{itemRawId}', [InventoryDashboardController::class, 'updateBufferStockRawMaterial'])->name('admin.inventory.buffer-stock.update');
+        Route::delete('/inventory/buffer-stock/raw-materials/{itemRawId}', [InventoryDashboardController::class, 'destroyBufferStockRawMaterial'])->name('admin.inventory.buffer-stock.destroy');
+        Route::post('/inventory/buffer-stock/sync', [InventoryDashboardController::class, 'syncBufferStocks'])->name('admin.inventory.buffer-stock.sync');
+        Route::post('/inventory/buffer-stock/sync-from-csv', [InventoryDashboardController::class, 'syncBufferStockFromCSV'])->name('admin.inventory.buffer-stock.sync-from-csv');
+        Route::get('/inventory/buffer-stock/export-analysis', [InventoryDashboardController::class, 'exportInventoryAnalysis'])->name('admin.inventory.buffer-stock.export-analysis');
+        Route::get('/inventory/buffer-stock/import-status', [InventoryDashboardController::class, 'bufferStockImportStatus'])->name('admin.inventory.buffer-stock.import-status');
+        Route::get('/inventory/buffer-stock/items-to-order', [InventoryDashboardController::class, 'itemsToOrder'])->name('admin.inventory.buffer-stock.items-to-order');
+
+        // Forecasting Routes
+        Route::get('/inventory/forecasting/demand', [InventoryDashboardController::class, 'demandForecasting'])->name('admin.inventory.forecasting.demand');
+
+        // Stock Opname Routes
+        Route::get('/inventory/stock-opname', [InventoryDashboardController::class, 'stockOpname'])->name('admin.inventory.stock-opname');
+
+        // Production Overview Routes
+        Route::get('/inventory/production-overview', [InventoryDashboardController::class, 'productionOverview'])->name('admin.inventory.production.overview');
     });
 });
 
