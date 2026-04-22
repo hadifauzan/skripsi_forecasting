@@ -551,6 +551,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         // Buffer Stock Routes
         Route::get('/inventory/buffer-stock/raw-materials', [InventoryDashboardController::class, 'bufferStockRawMaterials'])->name('admin.inventory.buffer-stock.raw-materials');
         Route::get('/inventory/buffer-stock/details/{itemRawId}', [InventoryDashboardController::class, 'bufferStockDetail'])->name('admin.inventory.buffer-stock.detail');
+        Route::get('/inventory/buffer-stock/production-master-data', [InventoryDashboardController::class, 'bufferStockProductionMasterData'])->name('admin.inventory.buffer-stock.production-master-data');
+        Route::get('/inventory/buffer-stock/production-options/{itemRawId}', [InventoryDashboardController::class, 'bufferStockProductionOptions'])->name('admin.inventory.buffer-stock.production-options');
+        Route::post('/inventory/buffer-stock/produce', [InventoryDashboardController::class, 'produceFromRawMaterial'])->name('admin.inventory.buffer-stock.produce');
         Route::put('/inventory/buffer-stock/raw-materials/{itemRawId}', [InventoryDashboardController::class, 'updateBufferStockRawMaterial'])->name('admin.inventory.buffer-stock.update');
         Route::delete('/inventory/buffer-stock/raw-materials/{itemRawId}', [InventoryDashboardController::class, 'destroyBufferStockRawMaterial'])->name('admin.inventory.buffer-stock.destroy');
         Route::post('/inventory/buffer-stock/sync', [InventoryDashboardController::class, 'syncBufferStocks'])->name('admin.inventory.buffer-stock.sync');

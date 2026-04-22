@@ -34,7 +34,7 @@ class BufferStockConfig extends Model
     protected $casts = [
         'item_id' => 'integer',
         'branch_id' => 'integer',
-        'avg_daily_usage' => 'decimal:4',
+        'avg_daily_usage' => 'decimal:1',
         'max_daily_usage' => 'decimal:4',
         'lead_time_days' => 'integer',
         'max_lead_time_days' => 'integer',

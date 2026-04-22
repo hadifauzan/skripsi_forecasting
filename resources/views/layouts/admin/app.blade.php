@@ -59,7 +59,7 @@
         }
         @font-face {
             font-family: 'Nunito';
-            src: url('{{ asset('assets/fonts/nunito-v32-latin/nunito-v32-latin-regular.woff2') }}') format('woff2');
+            src: url('{{ asset('assets/fonts/nunito-sans-v19-latin/nunito-sans-v19-latin-regular.woff2') }}') format('woff2');
             font-weight: 400;
             font-display: swap;
         }

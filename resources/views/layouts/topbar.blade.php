@@ -150,8 +150,8 @@
                         </a>
                     @else
                         <!-- User Menu for Authenticated Users -->
-                        <div class="relative group">
-                            <button
+                        <div class="relative" id="user-profile-dropdown">
+                            <button type="button" id="user-profile-toggle"
                                 class="h-10 flex items-center space-x-2 px-4 py-2 text-gray-700 hover:text-blue-600 transition-colors duration-200 border border-transparent rounded-full">
                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -160,7 +160,7 @@
                                 <span class="font-nunito font-medium text-sm lg:text-base">
                                     {{ $isCustomer ? $currentUser->name_customer : $currentUser->name }}
                                 </span>
-                                <svg class="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" fill="none"
+                                <svg id="user-profile-arrow" class="h-4 w-4 transition-transform duration-200" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 9l-7 7-7-7"></path>
@@ -168,8 +168,8 @@
                             </button>
 
                             <!-- Dropdown Menu -->
-                            <div
-                                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div id="user-profile-menu"
+                                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 transition-all duration-200 z-50 hidden">
                                 <div class="py-1">
                                     @if($isAdmin)
                                         <a href="{{ route('admin.view-data') }}"
@@ -414,3 +414,29 @@
         </div>
     </div>
 </header>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileDropdown = document.getElementById('user-profile-dropdown');
+        const profileToggle = document.getElementById('user-profile-toggle');
+        const profileMenu = document.getElementById('user-profile-menu');
+        const profileArrow = document.getElementById('user-profile-arrow');
+
+        if (!profileDropdown || !profileToggle || !profileMenu || !profileArrow) {
+            return;
+        }
+
+        profileToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileMenu.classList.toggle('hidden');
+            profileArrow.style.transform = profileMenu.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!profileDropdown.contains(e.target)) {
+                profileMenu.classList.add('hidden');
+                profileArrow.style.transform = 'rotate(0deg)';
+            }
+        });
+    });
+</script>

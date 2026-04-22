@@ -1,5 +1,5 @@
 {{-- resources/views/layouts/admin/topbar.blade.php --}}
-<header class="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+<header class="relative z-50 bg-white shadow-md">
     <div class="flex justify-between items-center py-3 lg:py-4">
         <!-- Left Side: Hamburger + Logo -->
         <div class="flex items-center">
@@ -27,7 +27,7 @@
 
         <!-- User Info Dropdown -->
         <div class="relative px-4 sm:px-6 lg:px-8">
-            <button id="user-dropdown-btn"
+                <button type="button" id="user-dropdown-btn"
                 class="flex items-center space-x-2 sm:space-x-3 p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500/50">
                 <!-- User Avatar -->
                 <div class="w-8 h-8 sm:w-10 sm:h-10 bg-brand-500 rounded-full flex items-center justify-center">
@@ -51,7 +51,7 @@
 
             <!-- Dropdown Menu -->
             <div id="user-dropdown-menu"
-                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50 hidden">
+                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-[60] hidden">
                 <!-- User Info Header -->
                 <div class="px-4 py-3 border-b border-gray-200">
                     <p class="text-sm font-medium text-gray-900">{{ Auth::user()->name }}</p>

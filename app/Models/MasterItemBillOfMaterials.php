@@ -25,7 +25,7 @@ class MasterItemBillOfMaterials extends Model
     protected $casts = [
         'item_id' => 'integer',
         'item_raw_id' => 'integer',
-        'quantity_required' => 'decimal:4',
+        'quantity_required' => 'decimal:1',
         'yield_percentage' => 'decimal:2'
     ];
 

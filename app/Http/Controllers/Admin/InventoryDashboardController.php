@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\MasterInventory;
 use App\Models\MasterItem;
+use App\Models\MasterItemBillOfMaterials;
 use App\Models\MasterItemStock;
 use App\Models\MasterItemRawMaterial;
 use App\Models\ProductionOrder;
@@ -19,6 +20,7 @@ use App\Models\TransactionSalesDetails;
 use App\Services\BufferStockCalculationService;
 use App\Services\InventoryAnalysisService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -331,7 +333,18 @@ class InventoryDashboardController extends Controller
 
             $csvData = $analysisService->importFromCSV($csvPath);
 
-            $filteredData = $csvData;
+            // Merge CSV with database current_stock (database values take priority)
+            $dbMaterials = MasterItemRawMaterial::all()->keyBy('item_raw_id');
+            $mergedData = $csvData->map(function ($material) use ($dbMaterials) {
+                $itemRawId = (int) ($material['item_raw_id'] ?? 0);
+                if ($itemRawId > 0 && isset($dbMaterials[$itemRawId])) {
+                    // Use database current_stock value (always up-to-date after production)
+                    $material['current_stock'] = $dbMaterials[$itemRawId]->current_stock;
+                }
+                return $material;
+            });
+
+            $filteredData = $mergedData;
             if ($search !== '') {
                 $keyword = mb_strtolower($search);
                 $filteredData = $csvData->filter(function ($item) use ($keyword) {
@@ -445,9 +458,9 @@ class InventoryDashboardController extends Controller
                 'forecast_period_days' => $forecastDays,
                 'source' => 'ARIMA Seeder CSV',
                 'updated_at' => $rawForecastData->max('updated_at'),
-                'avg_mae' => round((float) $forecastData->avg('mae'), 4),
-                'avg_rmse' => round((float) $forecastData->avg('rmse'), 4),
-                'avg_mape' => round((float) $forecastData->avg('mape_percentage'), 4),
+                'avg_mae' => round((float) $forecastData->avg('mae'), 1),
+                'avg_rmse' => round((float) $forecastData->avg('rmse'), 1),
+                'avg_mape' => round((float) $forecastData->avg('mape_percentage'), 1),
                 'kategori_rendah' => (int) optional($categorySummary->get('rendah'))->jumlah_produk,
                 'kategori_menengah' => (int) optional($categorySummary->get('menengah'))->jumlah_produk,
                 'kategori_tinggi' => (int) optional($categorySummary->get('tinggi'))->jumlah_produk,
@@ -739,6 +752,750 @@ class InventoryDashboardController extends Controller
             'success' => true,
             'message' => 'Data bahan baku berhasil dihapus.'
         ]);
+    }
+
+    /**
+     * GET: /admin/inventory/buffer-stock/production-master-data
+     * Get master data for production modal: raw materials, inventories, and BOM products.
+     */
+    public function bufferStockProductionMasterData()
+    {
+        $inventoryOptions = MasterInventory::orderBy('inventory_id')
+            ->get(['inventory_id', 'name_inventory', 'branch_id']);
+
+        $materials = MasterItemRawMaterial::orderBy('material_name')
+            ->get(['item_raw_id', 'material_name', 'unit', 'current_stock']);
+
+        $itemIds = MasterItem::query()
+            ->select('item_id')
+            ->pluck('item_id')
+            ->values();
+
+        $productOptions = collect();
+
+        foreach ($itemIds as $itemId) {
+            $item = MasterItem::find($itemId);
+            if (!$item) {
+                continue;
+            }
+
+            $recipe = $this->buildProductionRecipeForItem((int) $itemId, 1);
+            if (empty($recipe['materials'])) {
+                continue;
+            }
+
+            $maxProducible = (int) ($recipe['max_producible'] ?? 0);
+            $bomPreview = collect($recipe['materials'])
+                ->map(function ($need) {
+                    $raw = $need['raw'] ?? null;
+
+                    return [
+                        'item_raw_id' => (int) ($raw->item_raw_id ?? 0),
+                        'material_name' => (string) ($need['material_name'] ?? ($raw->material_name ?? '-')),
+                        'unit' => (string) ($need['unit'] ?? ($raw->unit ?? '-')),
+                        'required_per_unit' => round((float) ($need['required_per_unit'] ?? 0), 1),
+                        'stock_now' => (float) ($raw->current_stock ?? 0),
+                    ];
+                })
+                ->values()
+                ->all();
+
+            $productOptions->push([
+                'item_id' => (int) $item->item_id,
+                'code_item' => (string) ($item->code_item ?? ''),
+                'name_item' => (string) ($item->name_item ?? '-'),
+                'max_producible' => max(0, $maxProducible),
+                'recipe_source' => (string) ($recipe['source'] ?? 'bom'),
+                'bom_preview' => $bomPreview,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'materials' => $materials,
+            'inventories' => $inventoryOptions,
+            'products' => $productOptions,
+        ]);
+    }
+
+    /**
+     * GET: /admin/inventory/buffer-stock/production-options/{itemRawId}
+     * Get finished goods that can be produced by selected raw material.
+     */
+    public function bufferStockProductionOptions($itemRawId)
+    {
+        $material = MasterItemRawMaterial::find($itemRawId);
+
+        if (!$material) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bahan baku tidak ditemukan.'
+            ], 404);
+        }
+
+        $inventoryOptions = MasterInventory::orderBy('inventory_id')
+            ->get(['inventory_id', 'name_inventory', 'branch_id']);
+
+        $itemIds = MasterItem::query()
+            ->select('item_id')
+            ->pluck('item_id')
+            ->values();
+
+        $productOptions = collect();
+
+        foreach ($itemIds as $itemId) {
+            $item = MasterItem::find($itemId);
+            if (!$item) {
+                continue;
+            }
+
+            $recipe = $this->buildProductionRecipeForItem((int) $itemId, 1);
+            if (empty($recipe['materials'])) {
+                continue;
+            }
+
+            $containsSelectedRaw = collect($recipe['materials'])
+                ->contains(function ($need) use ($itemRawId) {
+                    return (int) (($need['raw']->item_raw_id ?? 0)) === (int) $itemRawId;
+                });
+
+            if (!$containsSelectedRaw) {
+                continue;
+            }
+
+            $maxProducible = (int) ($recipe['max_producible'] ?? 0);
+            $bomPreview = collect($recipe['materials'])
+                ->map(function ($need) {
+                    $raw = $need['raw'] ?? null;
+
+                    return [
+                        'item_raw_id' => (int) ($raw->item_raw_id ?? 0),
+                        'material_name' => (string) ($need['material_name'] ?? ($raw->material_name ?? '-')),
+                        'unit' => (string) ($need['unit'] ?? ($raw->unit ?? '-')),
+                        'required_per_unit' => round((float) ($need['required_per_unit'] ?? 0), 1),
+                        'stock_now' => (float) ($raw->current_stock ?? 0),
+                    ];
+                })
+                ->values()
+                ->all();
+
+            $productOptions->push([
+                'item_id' => (int) $item->item_id,
+                'code_item' => (string) ($item->code_item ?? ''),
+                'name_item' => (string) ($item->name_item ?? '-'),
+                'max_producible' => max(0, $maxProducible),
+                'recipe_source' => (string) ($recipe['source'] ?? 'bom'),
+                'bom_preview' => $bomPreview,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'material' => [
+                'item_raw_id' => (int) $material->item_raw_id,
+                'material_name' => (string) ($material->material_name ?? '-'),
+                'unit' => (string) ($material->unit ?? '-'),
+                'current_stock' => (int) ($material->current_stock ?? 0),
+            ],
+            'inventories' => $inventoryOptions,
+            'products' => $productOptions,
+        ]);
+    }
+
+    /**
+     * POST: /admin/inventory/buffer-stock/produce
+     * Consume raw materials and increase finished goods stock.
+     */
+    public function produceFromRawMaterial(Request $request)
+    {
+        $validated = $request->validate([
+            'item_id' => 'required|integer|exists:master_items,item_id',
+            'inventory_id' => 'required|integer|exists:master_inventories,inventory_id',
+            'qty_produced' => 'required|integer|min:1|max:1000000',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        $itemId = (int) $validated['item_id'];
+        $inventoryId = (int) $validated['inventory_id'];
+        $qtyProduced = (int) $validated['qty_produced'];
+
+        $inventory = MasterInventory::find($inventoryId);
+        if (!$inventory) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Inventori tidak ditemukan.'
+            ], 404);
+        }
+
+        $branchId = (int) $inventory->branch_id;
+        $userId = (int) (Auth::id() ?? 0);
+
+        if ($userId <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Session user tidak valid. Silakan login ulang.'
+            ], 401);
+        }
+
+        $recipe = $this->buildProductionRecipeForItem($itemId, $qtyProduced);
+
+        if (empty($recipe['materials'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Racikan produk belum tersedia (BOM/CSV), produksi tidak dapat diproses.'
+            ], 422);
+        }
+
+        $materialNeeds = collect($recipe['materials'])->map(function ($need) {
+            $raw = $need['raw'] ?? null;
+
+            return [
+                'bom' => $need['bom'] ?? null,
+                'raw' => $raw,
+                'material_name' => (string) ($need['material_name'] ?? ($raw->material_name ?? '-')),
+                'required_qty' => round((float) ($need['required_qty'] ?? 0), 1),
+                'unit_cost' => (float) ($raw->purchase_price ?? 0),
+                'total_cost' => round((float) ($need['required_qty'] ?? 0) * (float) ($raw->purchase_price ?? 0), 2),
+            ];
+        })->values()->all();
+
+        $totalMaterialCost = 0;
+
+        foreach ($materialNeeds as $need) {
+            $raw = $need['raw'];
+            if (!$raw) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ada bahan baku racikan yang tidak ditemukan di database.'
+                ], 422);
+            }
+
+            $requiredQty = (float) ($need['required_qty'] ?? 0);
+            $stockNow = (float) ($raw->current_stock ?? 0);
+            if ($stockNow < $requiredQty) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Stok bahan baku ' . ($raw->material_name ?? '-') . ' tidak mencukupi. Dibutuhkan ' . round($requiredQty, 1) . ', tersedia ' . round($stockNow, 1) . '.',
+                ], 422);
+            }
+
+            $totalMaterialCost += (float) ($need['total_cost'] ?? 0);
+        }
+
+        $unitCostFinished = $qtyProduced > 0 ? ($totalMaterialCost / $qtyProduced) : 0;
+
+        $now = Carbon::now();
+        $orderNumber = 'PRD-' . $now->format('YmdHis') . '-' . $itemId;
+        $rawOutDoc = 'RMO-' . $now->format('YmdHis');
+        $fgInDoc = 'FGI-' . $now->format('YmdHis');
+        $batchNumber = 'BATCH-' . $now->format('YmdHis');
+
+        $result = DB::transaction(function () use (
+            $itemId,
+            $branchId,
+            $userId,
+            $orderNumber,
+            $qtyProduced,
+            $totalMaterialCost,
+            $unitCostFinished,
+            $materialNeeds,
+            $rawOutDoc,
+            $fgInDoc,
+            $batchNumber,
+            $inventoryId,
+            $validated,
+            $now
+        ) {
+            $productionOrder = ProductionOrder::create([
+                'item_id' => $itemId,
+                'branch_id' => $branchId,
+                'created_by' => $userId,
+                'approved_by' => $userId,
+                'order_number' => $orderNumber,
+                'qty_planned' => $qtyProduced,
+                'qty_produced' => $qtyProduced,
+                'unit' => 'unit',
+                'status' => 'completed',
+                'planned_date' => $now->toDateString(),
+                'started_at' => $now,
+                'completed_at' => $now,
+                'total_material_cost' => round($totalMaterialCost, 2),
+                'overhead_cost' => 0,
+                'hpp_per_unit' => round($unitCostFinished, 2),
+                'notes' => $validated['notes'] ?? null,
+            ]);
+
+            foreach ($materialNeeds as $need) {
+                $raw = $need['raw'];
+                $requiredQty = round((float) $need['required_qty'], 1);
+                $stockBefore = (float) ($raw->current_stock ?? 0);
+                $stockAfter = max(0, round($stockBefore - $requiredQty, 1));
+
+                $raw->update([
+                    'current_stock' => $stockAfter,
+                ]);
+
+                RawMaterialOut::create([
+                    'item_raw_id' => (int) $raw->item_raw_id,
+                    'production_order_id' => (int) $productionOrder->production_order_id,
+                    'bom_id' => isset($need['bom']) && $need['bom'] ? (int) $need['bom']->bom_id : null,
+                    'branch_id' => $branchId,
+                    'issued_by' => $userId,
+                    'document_number' => $rawOutDoc,
+                    'qty_requested' => $requiredQty,
+                    'qty_issued' => $requiredQty,
+                    'unit' => $raw->unit,
+                    'unit_cost' => round((float) $need['unit_cost'], 1),
+                    'total_cost' => round((float) $need['total_cost'], 2),
+                    'stock_before' => $stockBefore,
+                    'stock_after' => $stockAfter,
+                    'reason' => 'production',
+                    'issued_date' => $now->toDateString(),
+                    'notes' => 'Auto produksi dari dashboard buffer stock.',
+                ]);
+            }
+
+            $finishedStock = MasterItemStock::where('item_id', $itemId)
+                ->where('inventory_id', $inventoryId)
+                ->first();
+
+            $stockBeforeFinished = (int) ($finishedStock->stock ?? 0);
+            $stockAfterFinished = $stockBeforeFinished + $qtyProduced;
+
+            if ($finishedStock) {
+                $finishedStock->update([
+                    'stock' => $stockAfterFinished,
+                ]);
+            } else {
+                MasterItemStock::create([
+                    'item_id' => $itemId,
+                    'inventory_id' => $inventoryId,
+                    'stock' => $stockAfterFinished,
+                    'buffer_stock' => 0,
+                ]);
+            }
+
+            FinishedGoodsIn::create([
+                'item_id' => $itemId,
+                'production_order_id' => (int) $productionOrder->production_order_id,
+                'inventory_id' => $inventoryId,
+                'branch_id' => $branchId,
+                'received_by' => $userId,
+                'document_number' => $fgInDoc,
+                'batch_number' => $batchNumber,
+                'qty_received' => $qtyProduced,
+                'unit' => 'unit',
+                'unit_cost' => round($unitCostFinished, 1),
+                'total_cost' => round($totalMaterialCost, 2),
+                'stock_before' => $stockBeforeFinished,
+                'stock_after' => $stockAfterFinished,
+                'production_date' => $now->toDateString(),
+                'received_date' => $now->toDateString(),
+                'qc_status' => 'passed',
+                'qc_notes' => 'Auto pass dari produksi dashboard.',
+                'notes' => 'Auto produksi dari dashboard buffer stock.',
+            ]);
+
+            return [
+                'production_order_id' => (int) $productionOrder->production_order_id,
+                'qty_produced' => $qtyProduced,
+                'total_material_cost' => round($totalMaterialCost, 2),
+                'hpp_per_unit' => round($unitCostFinished, 2),
+                'stock_after_finished' => $stockAfterFinished,
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Produksi berhasil diproses. Stok bahan baku berkurang dan stok produk jadi bertambah.',
+            'data' => $result,
+        ]);
+    }
+
+    private function buildProductionRecipeForItem(int $itemId, int $qtyProduced): array
+    {
+        $item = MasterItem::find($itemId);
+        if (!$item) {
+            return ['source' => 'none', 'materials' => [], 'max_producible' => 0];
+        }
+
+        $recipes = $this->parseProductionRecipesFromCsv();
+        $matchedRecipe = $this->matchCsvRecipeToItem($item, $recipes);
+
+        if ($matchedRecipe) {
+            $rawMaterials = MasterItemRawMaterial::all();
+            $materials = [];
+            $maxProducible = null;
+
+            foreach ($matchedRecipe['ingredients'] as $ingredient) {
+                $raw = $this->matchRawMaterialByName((string) ($ingredient['material_name'] ?? ''), $rawMaterials);
+                
+                $requiredPerUnit = (float) ($ingredient['required_per_unit'] ?? 0);
+                $csvUnit = (string) ($ingredient['unit'] ?? '');
+                
+                if ($requiredPerUnit <= 0) {
+                    continue;
+                }
+
+                // Convert CSV unit to database unit before calculation
+                if ($raw && $csvUnit !== '') {
+                    $dbUnit = (string) ($raw->unit ?? '');
+                    $requiredPerUnit = $this->convertUnitTo($requiredPerUnit, $csvUnit, $dbUnit);
+                }
+
+                $requiredPerUnit = round($requiredPerUnit, 1);
+
+                if ($raw) {
+                    $stockNow = (float) ($raw->current_stock ?? 0);
+                    $maxByRaw = (int) floor($stockNow / $requiredPerUnit);
+                    $maxProducible = is_null($maxProducible) ? $maxByRaw : min($maxProducible, $maxByRaw);
+                } else {
+                    $maxProducible = 0;
+                }
+
+                $materials[] = [
+                    'bom' => null,
+                    'raw' => $raw,
+                    'material_name' => (string) ($raw->material_name ?? ($ingredient['material_name'] ?? '-')),
+                    'unit' => (string) ($raw->unit ?? 'unit'),
+                    'required_per_unit' => $requiredPerUnit,
+                    'required_qty' => round($requiredPerUnit * $qtyProduced, 1),
+                ];
+            }
+
+            // Deduplicate materials by item_raw_id to prevent duplicate entries
+            $seenRawIds = [];
+            $materials = array_filter($materials, function ($mat) use (&$seenRawIds) {
+                $rawId = $mat['raw'] ? (int) $mat['raw']->item_raw_id : null;
+                if (!$rawId || in_array($rawId, $seenRawIds)) {
+                    return false; // Skip duplicates
+                }
+                $seenRawIds[] = $rawId;
+                return true;
+            });
+            $materials = array_values($materials); // Re-index array
+
+            if (!empty($materials)) {
+                return [
+                    'source' => 'csv',
+                    'materials' => $materials,
+                    'max_producible' => max(0, (int) ($maxProducible ?? 0)),
+                ];
+            }
+        }
+
+        $bomRows = MasterItemBillOfMaterials::with('rawMaterial')
+            ->where('item_id', $itemId)
+            ->get();
+
+        if ($bomRows->isEmpty()) {
+            return ['source' => 'none', 'materials' => [], 'max_producible' => 0];
+        }
+
+        $materials = [];
+        $maxProducible = null;
+
+        foreach ($bomRows as $bom) {
+            $raw = $bom->rawMaterial;
+            if (!$raw) {
+                continue;
+            }
+
+            $requiredPerUnit = (float) $bom->quantity_required;
+            $yield = (float) ($bom->yield_percentage ?? 0);
+
+            if ($yield > 0 && $yield < 100) {
+                $requiredPerUnit = $requiredPerUnit / ($yield / 100);
+            }
+
+            $requiredPerUnit = round($requiredPerUnit, 1);
+            if ($requiredPerUnit <= 0) {
+                continue;
+            }
+
+            $stockNow = (float) ($raw->current_stock ?? 0);
+            $maxByRaw = (int) floor($stockNow / $requiredPerUnit);
+            $maxProducible = is_null($maxProducible) ? $maxByRaw : min($maxProducible, $maxByRaw);
+
+            $materials[] = [
+                'bom' => $bom,
+                'raw' => $raw,
+                'material_name' => (string) ($raw->material_name ?? '-'),
+                'unit' => (string) ($raw->unit ?? '-'),
+                'required_per_unit' => $requiredPerUnit,
+                'required_qty' => round($requiredPerUnit * $qtyProduced, 1),
+            ];
+        }
+
+        return [
+            'source' => 'bom',
+            'materials' => $materials,
+            'max_producible' => max(0, (int) ($maxProducible ?? 0)),
+        ];
+    }
+
+    private function parseProductionRecipesFromCsv(): array
+    {
+        $path = base_path('python/Kalkulator_Produksi_Sesuai_Excel_update.csv');
+        if (!file_exists($path)) {
+            return [];
+        }
+
+        $content = file_get_contents($path);
+        if ($content === false) {
+            return [];
+        }
+
+        $lines = preg_split('/\r\n|\r|\n/', $content) ?: [];
+        $recipes = [];
+        $currentProduct = null;
+        $inIngredientSection = false;
+
+        foreach ($lines as $line) {
+            $row = str_getcsv($line);
+            $col0 = trim((string) ($row[0] ?? ''));
+            $col1 = trim((string) ($row[1] ?? ''));
+
+            if ($col0 === '' && $col1 === '') {
+                continue;
+            }
+
+            if (stripos($col0, 'Produk:') === 0) {
+                $productName = trim(substr($col0, strlen('Produk:')));
+                $currentProduct = $productName;
+                $recipes[$currentProduct] = [
+                    'product_name' => $productName,
+                    'ingredients' => [],
+                ];
+                $inIngredientSection = false;
+                continue;
+            }
+
+            if (!$currentProduct) {
+                continue;
+            }
+
+            if (strcasecmp($col0, 'Bahan') === 0) {
+                $inIngredientSection = true;
+                continue;
+            }
+
+            if (!$inIngredientSection) {
+                continue;
+            }
+
+            if ($col0 === '' || stripos($col0, 'Potensi Hasil Produk') === 0) {
+                continue;
+            }
+
+            $parsedData = $this->parseValueWithUnit($col1);
+            if (!$parsedData) {
+                continue;
+            }
+
+            $requiredPerUnit = $parsedData['value'];
+            $unit = $parsedData['unit'];
+
+            $recipes[$currentProduct]['ingredients'][] = [
+                'material_name' => $col0,
+                'required_per_unit' => $requiredPerUnit,
+                'unit' => $unit,
+            ];
+        }
+
+        return array_values(array_filter($recipes, function ($recipe) {
+            return !empty($recipe['ingredients']);
+        }));
+    }
+
+    private function matchCsvRecipeToItem(MasterItem $item, array $recipes): ?array
+    {
+        $itemName = strtoupper((string) ($item->name_item ?? ''));
+        $itemCode = strtoupper((string) ($item->code_item ?? ''));
+        $itemVolume = $this->extractMlValue($itemName . ' ' . $itemCode);
+
+        foreach ($recipes as $recipe) {
+            $productName = strtoupper((string) ($recipe['product_name'] ?? ''));
+            [$recipeCode, $recipeVolume] = $this->extractRecipeProductCodeAndVolume($productName);
+
+            if ($recipeCode === '') {
+                continue;
+            }
+
+            $codeMatched = str_contains($itemName, $recipeCode)
+                || str_contains($itemCode, $recipeCode);
+
+            if (!$codeMatched) {
+                continue;
+            }
+
+            if ($recipeVolume !== null && $itemVolume !== null) {
+                if (abs($recipeVolume - $itemVolume) > 0.01) {
+                    continue;
+                }
+            }
+
+            return $recipe;
+        }
+
+        return null;
+    }
+
+    private function matchRawMaterialByName(string $csvMaterialName, $rawMaterials): ?MasterItemRawMaterial
+    {
+        $needle = $this->normalizeText($csvMaterialName);
+        if ($needle === '') {
+            return null;
+        }
+
+        foreach ($rawMaterials as $raw) {
+            $name = $this->normalizeText((string) ($raw->material_name ?? ''));
+            if ($name === $needle) {
+                return $raw;
+            }
+        }
+
+        foreach ($rawMaterials as $raw) {
+            $name = $this->normalizeText((string) ($raw->material_name ?? ''));
+            if (str_contains($name, $needle) || str_contains($needle, $name)) {
+                return $raw;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Parse value and unit from text
+     * e.g., "2 liter" → ['value' => 2.0, 'unit' => 'liter']
+     * e.g., "0.15 ml" → ['value' => 0.15, 'unit' => 'ml']
+     * e.g., "5" → ['value' => 5.0, 'unit' => '']
+     */
+    private function parseValueWithUnit(string $text): ?array
+    {
+        if ($text === '') {
+            return null;
+        }
+
+        // Match: number (optional decimals) + optional space + optional unit
+        if (!preg_match('/(\d+(?:[\.,]\d+)?)\s*([a-zA-Z]*)/i', $text, $matches)) {
+            return null;
+        }
+
+        $value = (float) str_replace(',', '.', $matches[1]);
+        if ($value <= 0) {
+            return null;
+        }
+
+        $unit = strtolower(trim($matches[2] ?? ''));
+
+        return [
+            'value' => $value,
+            'unit' => $unit,
+        ];
+    }
+
+    /**
+     * Convert value from one unit to another
+     * Supports: volume (liter/l/ml) and weight (kg/g)
+     * Returns converted value, or original value if units are incompatible
+     */
+    private function convertUnitTo(float $value, string $fromUnit, string $toUnit): float
+    {
+        $from = strtolower(trim($fromUnit));
+        $to = strtolower(trim($toUnit));
+
+        // If units are the same, no conversion
+        if ($from === $to) {
+            return $value;
+        }
+
+        // Volume conversions (normalize to ml)
+        $volumeUnits = ['liter', 'l', 'litre', 'ml', 'milliliter', 'millilitre', 'cc'];
+        $isFromVolume = in_array($from, $volumeUnits);
+        $isToVolume = in_array($to, $volumeUnits);
+
+        if ($isFromVolume && $isToVolume) {
+            // Convert from unit to ml first
+            $valueInMl = $value;
+            if (in_array($from, ['liter', 'l', 'litre'])) {
+                $valueInMl = $value * 1000;
+            }
+
+            // Convert from ml to target unit
+            if (in_array($to, ['liter', 'l', 'litre'])) {
+                return $valueInMl / 1000;
+            }
+            return $valueInMl; // Return as ml
+        }
+
+        // Weight conversions (normalize to gram)
+        $weightUnits = ['kg', 'kilogram', 'g', 'gram'];
+        $isFromWeight = in_array($from, $weightUnits);
+        $isToWeight = in_array($to, $weightUnits);
+
+        if ($isFromWeight && $isToWeight) {
+            // Convert from unit to gram first
+            $valueInGram = $value;
+            if (in_array($from, ['kg', 'kilogram'])) {
+                $valueInGram = $value * 1000;
+            }
+
+            // Convert from gram to target unit
+            if (in_array($to, ['kg', 'kilogram'])) {
+                return $valueInGram / 1000;
+            }
+            return $valueInGram; // Return as gram
+        }
+
+        // If units are incompatible (e.g., liter to kg), return original value
+        // This case would indicate a data error, but we're lenient
+        return $value;
+    }
+
+    private function normalizeText(string $text): string
+    {
+        $text = strtolower($text);
+        return preg_replace('/[^a-z0-9]/', '', $text) ?? '';
+    }
+
+    private function parseDecimalValue(string $text): ?float
+    {
+        if ($text === '') {
+            return null;
+        }
+
+        if (!preg_match('/\d+(?:[\.,]\d+)?/', $text, $matches)) {
+            return null;
+        }
+
+        $value = str_replace(',', '.', $matches[0]);
+        return is_numeric($value) ? (float) $value : null;
+    }
+
+    private function extractMlValue(string $text): ?float
+    {
+        if (!preg_match('/(\d+(?:[\.,]\d+)?)\s*ml/i', $text, $matches)) {
+            return null;
+        }
+
+        $value = str_replace(',', '.', $matches[1]);
+        return is_numeric($value) ? (float) $value : null;
+    }
+
+    private function extractRecipeProductCodeAndVolume(string $productName): array
+    {
+        if (preg_match('/([A-Z0-9]+)\s*-\s*(\d+(?:[\.,]\d+)?)\s*ML/i', $productName, $matches)) {
+            $code = strtoupper(trim($matches[1]));
+            $volume = (float) str_replace(',', '.', $matches[2]);
+            return [$code, $volume];
+        }
+
+        if (preg_match('/([A-Z0-9]+)/i', $productName, $matches)) {
+            return [strtoupper(trim($matches[1])), null];
+        }
+
+        return ['', null];
     }
 
     /**

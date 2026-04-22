@@ -31,12 +31,12 @@ class MasterItemRawMaterial extends Model
 
     protected $casts = [
         'purchase_price' => 'decimal:2',
-        'current_stock' => 'integer',
-        'avg_daily_usage' => 'decimal:4',
+        'current_stock' => 'decimal:1',
+        'avg_daily_usage' => 'decimal:1',
         'last_reorder_date' => 'date',
         'lead_time_days' => 'integer',
-        'buffer_stock' => 'integer',
-        'reorder_point' => 'integer',
+        'buffer_stock' => 'decimal:1',
+        'reorder_point' => 'decimal:1',
     ];
 
     // Relationships

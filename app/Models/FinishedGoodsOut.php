@@ -40,7 +40,7 @@ class FinishedGoodsOut extends Model
         'transaction_sales_detail_id' => 'integer',
         'issued_by' => 'integer',
         'qty_out' => 'decimal:2',
-        'unit_cost' => 'decimal:4',
+        'unit_cost' => 'decimal:1',
         'total_cost' => 'decimal:2',
         'stock_before' => 'decimal:2',
         'stock_after' => 'decimal:2',

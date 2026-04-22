@@ -53,8 +53,9 @@ class AppServiceProvider extends ServiceProvider
                     if ($webUser) {
                         $currentUser = $webUser;
                         $isAdmin = isset($webUser->role) && in_array($webUser->role, ['admin', 'superadmin']);
-                        // Check if user has inventory access (role_id 10, 11, 12)
-                        $hasInventoryAccess = isset($webUser->role_id) && in_array($webUser->role_id, [10, 11, 12]);
+                        $userRoleName = strtolower((string) ($webUser->role ?? ''));
+                        $hasInventoryAccess = in_array((int) ($webUser->role_id ?? 0), [10, 11, 12], true)
+                            || in_array($userRoleName, ['admin_inventory', 'owner', 'production_team'], true);
                         // Calculate cart count for web users
                         try {
                             $cartCount = Cart::where('user_id', $webUser->user_id)->sum('quantity') ?? 0;
